@@ -1,0 +1,9 @@
+services:
+  app:
+    build: packages/app
+    ports:
+      - 3000:3000
+  server:
+    build: packages/server
+    ports:
+      - 3001:3001
