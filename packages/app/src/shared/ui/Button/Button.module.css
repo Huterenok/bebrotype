@@ -1,0 +1,16 @@
+.wrapper {
+  padding: 12px 16px;
+
+  background-color: var(--sage);
+  border-radius: var(--radius-m);
+
+  color: var(--dark-green);
+
+  cursor: pointer;
+  transition: 0.3s all var(--transition);
+}
+
+.wrapper:hover {
+  background-color: var(--green);
+  color: var(--sage);
+}

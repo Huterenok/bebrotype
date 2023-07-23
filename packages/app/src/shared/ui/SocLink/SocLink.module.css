@@ -1,0 +1,11 @@
+.wrapper {
+  width: 32px;
+  height: 32px;
+
+  transition: 0.2s all var(--transition);
+}
+
+.wrapper:hover {
+  scale: 1.2;
+  transform: rotateX(45deg);
+}

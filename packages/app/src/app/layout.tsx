@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 
 import "app-flat/styles/globals.css";
-import {ralewayFont} from "app-flat/styles/fonts/index"
+import { ralewayFont } from "app-flat/styles/fonts/index";
+import { Navbar, Header } from "widgets";
 
 export const metadata: Metadata = {
   title: "Bebrotype",
   description: "Blindtyping trainer for real bebrochads",
+	icons: "/icons/banana.svg"
 };
 
 export default function RootLayout({
@@ -14,8 +16,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={ralewayFont.className}>{children}</body>
+    <html lang="en" className={ralewayFont.className}>
+      <body>
+        <Navbar />
+        <Header />
+        <div className="page_wrapper">{children}</div>
+      </body>
     </html>
   );
 }

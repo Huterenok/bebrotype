@@ -1,0 +1,1 @@
+export {TypingCard} from "./ui"
