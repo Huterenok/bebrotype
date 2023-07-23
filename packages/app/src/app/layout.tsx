@@ -7,7 +7,7 @@ import { Navbar, Header } from "widgets";
 export const metadata: Metadata = {
   title: "Bebrotype",
   description: "Blindtyping trainer for real bebrochads",
-	icons: "/icons/banana.svg"
+  icons: "/icons/banana.svg",
 };
 
 export default function RootLayout({
@@ -18,9 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={ralewayFont.className}>
       <body>
-        <Navbar />
-        <Header />
-        <div className="page_wrapper">{children}</div>
+        {children}
       </body>
     </html>
   );
