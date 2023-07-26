@@ -46,3 +46,8 @@ body {
 .page_wrapper {
   padding: 36px 24px;
 }
+
+::selection {
+  background: var(--dark-green); /* Цвет фона */
+  color: var(--sage); /* Цвет текста */
+}

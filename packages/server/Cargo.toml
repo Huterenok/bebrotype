@@ -16,3 +16,7 @@ diesel = { version = "2.1.0", features = ["postgres"] }
 diesel-async = { version = "0.3.1", features = ["postgres", "deadpool"] }
 lazy_static = "0.1.5"
 async_once = "0.2.6"
+magic-crypt = "3.1.12"
+jsonwebtoken = "8.3.0"
+chrono = "0.4.26"
+axum-macros = "0.3.8"

@@ -1,21 +1,35 @@
-use axum::{Router, Json};
-use axum::routing::post;
+pub mod jwt;
 
-use crate::entities::User;
-use crate::repositories::error::Result;
+use axum::Json;
+use hyper::{StatusCode, Request};
 
-use super::user::{CreateUserRequest, create_user};
+use crate::controllers::auth::dto::{AuthPayload, LoginDto};
+use crate::controllers::user::dto::CreateUserDto;
 
-pub fn create_auth_service() -> Router {
-	Router::new().route("/register", post(register))
+use crate::repositories::crypto::CR;
+use crate::repositories::error::{Error, Result};
+
+use self::jwt::generate_token;
+
+use super::user::{get_user_by_email, create_user};
+
+pub async fn register(register_request: CreateUserDto) -> Result<AuthPayload> {
+    let user = create_user(register_request).await?;
+
+    let token = generate_token(&user)?;
+
+    Ok(AuthPayload::new(token, user.into()))
 }
 
-async fn register(Json(register_request): Json<CreateUserRequest>) -> Result<Json<User>> {
-	let user = match create_user(register_request).await {
-			Ok(user) => user,
-			Err(err) => return Err(err)
-	};
+pub async fn login(login_body: LoginDto) -> Result<AuthPayload> {
+    let user = get_user_by_email(login_body.email).await?;
 
-	Ok(Json(user))
+    if login_body.password != CR.mc_decrypt(&user.password)? {
+        return Err((StatusCode::BAD_REQUEST, Json(Error::AuthWrongCredentials)));
+    }
+
+    let user = user.into();
+    let token = generate_token(&user)?;
+
+    Ok(AuthPayload::new(token, user.into()))
 }
-

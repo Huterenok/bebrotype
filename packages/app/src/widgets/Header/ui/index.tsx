@@ -10,7 +10,7 @@ export const Header: FC = () => {
     <div className={styles.wrapper}>
       <div className={styles.container}>
         <Link href={"/profile"} className={styles.profile}>
-          <ProfileBar username="Bebra" avatar="/icons/cat.jpg" />
+          <ProfileBar username="Bebra" avatar="/photo/cat.jpg" />
         </Link>
       </div>
     </div>
