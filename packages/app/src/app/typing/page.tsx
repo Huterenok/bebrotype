@@ -32,7 +32,13 @@ export default function TypingPage() {
       <Title>Choose your typing style</Title>
       <div className={styles.styles}>
         {typingStyles.map((el) => (
-          <TypingCard {...el} key={el.href} />
+          <TypingCard
+            href={el.href}
+            icon={el.icon}
+            subtitle={el.subtitle}
+            title={el.title}
+            key={el.href}
+          />
         ))}
       </div>
     </div>

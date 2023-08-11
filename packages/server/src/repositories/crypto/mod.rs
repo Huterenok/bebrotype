@@ -1,10 +1,8 @@
-use axum::Json;
-use hyper::StatusCode;
-
-use lazy_static::lazy_static;
+use axum::response::IntoResponse;
 
 use jsonwebtoken::{Algorithm, DecodingKey, EncodingKey, Validation};
 use magic_crypt::{new_magic_crypt, MagicCrypt256, MagicCryptTrait};
+use tokio::sync::OnceCell;
 
 use crate::repositories::env::ENV;
 use crate::repositories::error::{Error, Result};
@@ -21,11 +19,11 @@ pub struct Coder {
 }
 
 impl Coder {
-    fn new() -> Self {
-        let mc = new_magic_crypt!(&ENV.secret_magic_key, 256);
+    async fn new() -> Self {
+        let mc = new_magic_crypt!(&ENV().await.secret_magic_key, 256);
         let jwt = Jwt {
-            decoding_key: DecodingKey::from_secret(ENV.secret_jwt_key.as_bytes()),
-            encoding_key: EncodingKey::from_secret(ENV.secret_jwt_key.as_bytes()),
+            decoding_key: DecodingKey::from_secret(ENV().await.secret_jwt_key.as_bytes()),
+            encoding_key: EncodingKey::from_secret(ENV().await.secret_jwt_key.as_bytes()),
             validation: Validation::new(Algorithm::HS256),
         };
         Coder { mc, jwt }
@@ -40,15 +38,15 @@ impl Coder {
             Ok(decrypted) => Ok(decrypted),
             Err(err) => {
                 eprintln!("->> Error while mc_decrypting: {:?}", err);
-                Err((
-                    StatusCode::INTERNAL_SERVER_ERROR,
-                    Json(Error::InternalServerError),
-                ))
+                Err(Error::InternalServerError.into_response())
             }
         }
     }
 }
 
-lazy_static! {
-    pub static ref CR: Coder = Coder::new();
+static STATIC_CRYPTO: OnceCell<Coder> = OnceCell::const_new();
+pub async fn CR() -> &'static Coder {
+    STATIC_CRYPTO
+        .get_or_init(|| async { Coder::new().await })
+        .await
 }

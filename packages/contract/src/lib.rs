@@ -3,11 +3,11 @@ use near_sdk::{near_bindgen, PanicOnDefault, AccountId};
 use near_sdk::borsh::{self, BorshSerialize, BorshDeserialize};
 use near_sdk::{env};
 
-mod game;
+mod model;
 mod play;
 mod enumeration;
 
-use game::Game;
+use model::Game;
 
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]

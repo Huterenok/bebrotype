@@ -1,0 +1,38 @@
+.wrapper {
+  padding: 12px 24px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: var(--radius-m);
+
+  cursor: pointer;
+  transition: 0.3s all var(--transition);
+
+	&.common {
+		background-color: var(--sage);
+		color: var(--dark-green);
+		border: 2px solid var(--dark-green);
+	
+		&:hover {
+			background-color: var(--green);
+			color: var(--sage);
+			border: 2px solid var(--sage);
+		}
+	}
+
+	&.prime {
+		background-color: var(--green);
+		color: var(--sage);
+		border: 2px solid var(--sage);
+
+		&:hover {
+			background-color: var(--sage);
+			color: var(--dark-green);
+			border: 2px solid var(--dark-green);
+		}
+	}
+}
+
+

@@ -1,9 +1,16 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import { Title, Button, Text } from "shared/ui";
+import { RunningBanana } from "widgets";
 
 import styles from "app-flat/styles/page-styles/Home.module.css";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Bebrotype",
+  description: "Blindtyping trainer for real bebrochads",
+  icons: "/icons/banana.svg",
+};
 
 export default function Home() {
   return (
@@ -23,19 +30,14 @@ export default function Home() {
         participate in various competitions and get nice prizes (only test NEAR
         are distributed now).
       </Text>
-      <Button>
+      <Button className={styles.btn}>
         <Link href={"/typing"} className={styles.link}>
           Let{"'"}s Start now!
         </Link>
       </Button>
-      <Image
-        alt="I Drive"
-        src={"/photo/chad.jpg"}
-        objectFit="cover"
-        width={800}
-        height={400}
-        className={styles.image}
-      />
+      <div className={styles.model_wrapper}>
+        <RunningBanana />
+      </div>
     </div>
   );
 }

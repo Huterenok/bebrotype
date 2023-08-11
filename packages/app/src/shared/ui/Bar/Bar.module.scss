@@ -1,0 +1,23 @@
+.bar {
+  padding: 0px 12px;
+
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border: 3px solid var(--light-green);
+  border-radius: var(--radius-m);
+
+  color: var(--dark-green);
+  font-size: var(--font-m);
+
+  transition: 0.3s background-color var(--transition);
+}
+
+.bar:hover {
+  background-color: var(--green);
+  color: var(--sage);
+}
+

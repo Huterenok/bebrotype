@@ -1,14 +1,11 @@
-import type { Metadata } from "next";
+import { Suspense } from "react";
+
+import { Navbar, Header } from "widgets";
+import { Providers } from "app-flat/providers";
+import { Loader } from "shared/ui";
 
 import "app-flat/styles/globals.css";
-import { ralewayFont } from "app-flat/styles/fonts/index";
-import { Navbar, Header } from "widgets";
-
-export const metadata: Metadata = {
-  title: "Bebrotype",
-  description: "Blindtyping trainer for real bebrochads",
-  icons: "/icons/banana.svg",
-};
+import "react-toastify/dist/ReactToastify.css";
 
 export default function RootLayout({
   children,
@@ -16,9 +13,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={ralewayFont.className}>
+    <html lang="en">
       <body>
-        {children}
+        <Providers>
+          <div className="layout">
+            <Navbar />
+            <Header />
+            <Suspense fallback={<Loader />}>
+              <div className="pages_wrapper">{children}</div>
+            </Suspense>
+          </div>
+        </Providers>
       </body>
     </html>
   );

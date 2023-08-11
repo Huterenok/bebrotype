@@ -3,20 +3,16 @@ mod entities;
 mod repositories;
 mod services;
 
-use axum::Router;
-
-use crate::controllers::{create_auth_routes, create_user_routes};
-
 use repositories::env::ENV;
+
+use crate::controllers::create_router;
 
 #[tokio::main]
 async fn main() {
-    let app = Router::new()
-        .nest("/user", create_user_routes())
-        .nest("/auth", create_auth_routes());
+    let app = create_router();
 
-    println!("->> LISTENING on {}\n", &ENV.url_address);
-    axum::Server::bind(&ENV.url_address)
+    println!("->> LISTENING on {}\n", &ENV().await.url_address);
+    axum::Server::bind(&ENV().await.url_address)
         .serve(app.into_make_service())
         .await
         .unwrap()

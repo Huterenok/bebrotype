@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-axum = "0.6.18"
+axum = {version = "0.6.18", features = ["macros", "multipart"] }
 tokio = {version = "1.28.2", features = ["full"] }
 serde = { version = "1.0.163", features = ["derive"] }
 serde_json = "1.0"
@@ -14,9 +14,9 @@ hyper = { version = "0.14.26", features = ["full"] }
 dotenv = "0.15.0"
 diesel = { version = "2.1.0", features = ["postgres"] }
 diesel-async = { version = "0.3.1", features = ["postgres", "deadpool"] }
-lazy_static = "0.1.5"
-async_once = "0.2.6"
 magic-crypt = "3.1.12"
 jsonwebtoken = "8.3.0"
 chrono = "0.4.26"
-axum-macros = "0.3.8"
+tower-http = {version = "0.4.3", features = ["cors", "fs"]}
+tokio-util = {version = "0.7.8", features = ["io"]}
+

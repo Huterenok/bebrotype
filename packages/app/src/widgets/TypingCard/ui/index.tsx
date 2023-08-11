@@ -2,7 +2,7 @@ import { FC } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-import { Card } from "shared/ui";
+import { Card } from "shared/ui/Card";
 
 import { ITypingCard } from "../types";
 import styles from "./TypingCard.module.css";

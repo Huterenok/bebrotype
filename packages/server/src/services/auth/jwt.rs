@@ -1,15 +1,14 @@
 use axum::{
-    http::{HeaderMap, Request, StatusCode},
+    http::{HeaderMap, Request},
     middleware::Next,
-    response::Response,
-    Json,
+    response::{IntoResponse, Response},
 };
 use serde::{Deserialize, Serialize};
 
 use chrono::{Duration, Utc};
 use jsonwebtoken::{decode, encode, Header};
 
-use crate::{entities::User, services::user::get_user_by_email};
+use crate::{entities::User, services::users::get_user_by_email};
 
 use crate::repositories::crypto::CR;
 use crate::repositories::error::{Error, Result};
@@ -27,20 +26,20 @@ pub async fn authentication_middleware<T>(
 ) -> Result<Response> {
     let header_token = extract_token(headers)?;
 
-    let email = validate_token(&header_token)?;
+    let email = validate_token(&header_token).await?;
     let user = get_user_by_email(email).await;
 
     match user {
         Ok(user) => {
             request.extensions_mut().insert(user);
         }
-        Err(_) => return Err((StatusCode::UNAUTHORIZED, Json(Error::NotAuthorized))),
+        Err(_) => return Err(Error::NotAuthorized.into_response()),
     };
 
     Ok(next.run(request).await)
 }
 
-pub fn generate_token(claims: &User) -> Result<String> {
+pub async fn generate_token(claims: &User) -> Result<String> {
     let now = Utc::now();
     let expires_at = Duration::days(7);
     let expires_at = now + expires_at;
@@ -50,44 +49,41 @@ pub fn generate_token(claims: &User) -> Result<String> {
         email: claims.email.clone(),
     };
 
-    match encode(&Header::default(), &claims, &CR.jwt.encoding_key) {
+    match encode(&Header::default(), &claims, &CR().await.jwt.encoding_key) {
         Ok(token) => Ok(token),
         Err(err) => {
             eprintln!("->> Error generating token: {:?}", err);
-            Err((StatusCode::UNAUTHORIZED, Json(Error::InternalServerError)))
+            Err(Error::InternalServerError.into_response())
         }
     }
 }
 
-pub fn validate_token(token: &str) -> Result<String> {
-    decode::<Claims>(token, &CR.jwt.decoding_key, &CR.jwt.validation)
+pub async fn validate_token(token: &str) -> Result<String> {
+    decode::<Claims>(token, &CR().await.jwt.decoding_key, &CR().await.jwt.validation)
         .map_err(|error| match error.kind() {
             jsonwebtoken::errors::ErrorKind::InvalidToken
             | jsonwebtoken::errors::ErrorKind::InvalidSignature
             | jsonwebtoken::errors::ErrorKind::ExpiredSignature => {
                 eprintln!("{:?}", error);
-                (StatusCode::UNAUTHORIZED, Json(Error::NotAuthorized))
+                Error::NotAuthorized.into_response()
             }
-            _ => (StatusCode::UNAUTHORIZED, Json(Error::NotAuthorized)),
+            _ => Error::NotAuthorized.into_response(),
         })
         .map(|data| data.claims.email)
 }
 
 pub fn extract_token(headers: HeaderMap) -> Result<String> {
     let mut header_token = if let Some(token) = headers.get("Authorization") {
-        token.to_str().map_err(|error| {
-            eprintln!("->> Error extracting token from headers: {:?}", error);
-            (
-                StatusCode::INTERNAL_SERVER_ERROR,
-                Json(Error::InternalServerError),
-            )
-        })?
+        match token.to_str() {
+            Ok(token) => token,
+            Err(_) => return Err(Error::BadOrganisedToken.into_response()),
+        }
     } else {
-        return Err((StatusCode::UNAUTHORIZED, Json(Error::NotAuthorized)));
+        return Err(Error::NotAuthorized.into_response());
     };
     header_token = match header_token.split(" ").collect::<Vec<&str>>().get(1) {
         Some(&token) => token,
-        None => return Err((StatusCode::UNAUTHORIZED, Json(Error::BadOrganisedToken))),
+        None => return Err(Error::BadOrganisedToken.into_response()),
     };
-		Ok(header_token.to_string())
+    Ok(header_token.to_string())
 }

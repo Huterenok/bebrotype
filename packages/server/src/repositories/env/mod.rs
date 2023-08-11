@@ -1,7 +1,8 @@
 use std::net::SocketAddr;
 
 use dotenv::dotenv;
-use lazy_static::lazy_static;
+use tokio::sync::OnceCell;
+
 pub struct Env {
     pub url_address: SocketAddr,
     pub database_url: String,
@@ -31,7 +32,7 @@ pub fn load_env() -> Env {
     }
 }
 
-//TODO: Think about it
-lazy_static! {
-    pub static ref ENV: Env = load_env();
+static STATIC_ENV: OnceCell<Env> = OnceCell::const_new();
+pub async fn ENV() -> &'static Env {
+    STATIC_ENV.get_or_init(|| async { load_env() }).await
 }

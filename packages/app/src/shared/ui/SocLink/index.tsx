@@ -1,7 +1,7 @@
 import { FC } from "react";
 import Image from "next/image";
 
-import styles from "./SocLink.module.css";
+import styles from "./SocLink.module.scss";
 
 export interface ISocLink {
   img: string;

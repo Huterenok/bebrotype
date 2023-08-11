@@ -1,0 +1,40 @@
+.wrapper {
+	padding: 12px 24px;
+
+  width: 600px;
+
+  display: flex;
+  flex-direction: column;
+	justify-content: center;
+}
+
+.top {
+	display: grid;
+	grid-template-rows: repeat(2, 70px) ;
+	grid-template-columns: repeat(3, 1fr);
+	align-items: center;
+}
+
+.title {
+	grid-row: 2;
+	grid-column: span 3;
+	justify-self: center;
+	align-self: flex-start;
+
+	font-size: 32px;
+}
+
+.btn {
+	grid-column: 3;
+	grid-row: 1;
+	justify-self: end;
+	align-self: flex-start;
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	gap: 24px;
+}

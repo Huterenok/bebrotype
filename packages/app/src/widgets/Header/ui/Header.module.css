@@ -5,20 +5,15 @@
 }
 
 .container {
-  padding: 8px 32px;
+  padding: 0px 32px;
 
   height: 100%;
+  width: 100%;
 
   display: grid;
-  grid-template: 1fr / 196px 1fr 244px;
   align-items: center;
+  justify-content: end;
 
   background-color: var(--sage);
   border-radius: var(--radius-m);
-}
-
-.profile {
-  height: 100%;
-
-  grid-column: 3;
 }

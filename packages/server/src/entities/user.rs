@@ -1,7 +1,7 @@
 use diesel::prelude::*;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
-#[derive(Queryable, Selectable, Clone, Debug)]
+#[derive(Queryable, Selectable, Identifiable, Clone, Debug)]
 #[diesel(table_name = super::schema::users)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct User {
@@ -9,7 +9,9 @@ pub struct User {
     pub username: String,
     pub email: String,
     pub password: String,
+    pub avatar: Option<String>,
     pub near_address: Option<String>,
+    pub favourite_texts: Vec<Option<i32>>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -17,25 +19,9 @@ pub struct FilteredUser {
     pub id: i32,
     pub username: String,
     pub email: String,
+    pub avatar: Option<String>,
     pub near_address: Option<String>,
-}
-
-impl User {
-    pub fn new(
-        id: i32,
-        username: String,
-        email: String,
-        pwd: String,
-        near_address: Option<String>,
-    ) -> Self {
-        User {
-            id,
-            username,
-            email,
-            password: pwd,
-            near_address,
-        }
-    }
+    pub favourite_texts: Vec<Option<i32>>,
 }
 
 impl Into<FilteredUser> for User {
@@ -44,7 +30,9 @@ impl Into<FilteredUser> for User {
             id: self.id,
             username: self.username,
             email: self.email,
+            avatar: self.avatar,
             near_address: self.near_address,
+            favourite_texts: self.favourite_texts,
         }
     }
 }

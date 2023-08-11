@@ -14,6 +14,23 @@
   --radius-m: 16px;
 
   --transition: ease-in;
+
+  /* toast */
+  --toastify-color-progress-light: linear-gradient(
+    to right,
+    var(--sage),
+    var(--dark-green),
+    var(--sage),
+    var(--dark-green)
+  );
+  --toastify-toast-background: var(--sage);
+	--toastify-color-light: var(--sage);
+  --toastify-text-color-light: var(--dark-green);
+}
+
+@font-face {
+	font-family: "Raleway Bebra";
+	src: url(./fonts/Raleway-Regular.ttf) format("ttf");
 }
 
 * {
@@ -37,17 +54,28 @@ body {
   height: 100vh;
 
   background-color: var(--light-green);
+
+	font-family: "Raleway Bebra", sans-serif;
   font-size: var(--font-m);
   color: var(--dark-green);
 
   overflow: hidden;
 }
 
-.page_wrapper {
-  padding: 36px 24px;
+.layout {
+  width: 100%;
+  height: 100vh;
+
+  display: grid;
+  grid-template-rows: 86px 1fr;
+  grid-template-columns: 124px 1fr;
+}
+
+.pages_wrapper {
+  padding: 32px 24px;
 }
 
 ::selection {
-  background: var(--dark-green); /* Цвет фона */
-  color: var(--sage); /* Цвет текста */
+  background: var(--dark-green);
+  color: var(--sage);
 }
