@@ -2,9 +2,8 @@ pub mod auth;
 pub mod texts;
 pub mod users;
 
-use axum::{middleware, Router};
+use axum::{self, Router};
 
-use tower_http::cors::{Any, CorsLayer};
 use tower_http::services::ServeDir;
 
 use auth::create_auth_routes;
@@ -22,18 +21,13 @@ pub fn create_router() -> Router {
     let private_routes = Router::new()
         .merge(create_private_user_routes())
         .merge(create_private_text_routes())
-        .layer(middleware::from_fn(authentication_middleware));
+        .layer(axum::middleware::from_fn(authentication_middleware));
+
 
     let app = Router::new()
         .merge(public_routes)
         .merge(private_routes)
-        .nest_service("/static", ServeDir::new("static"))
-        .layer(
-            CorsLayer::new()
-                .allow_origin(Any)
-                .allow_methods(Any)
-                .allow_headers(Any),
-        );
+        .nest_service("/static", ServeDir::new("static"));
 
     Router::new().nest("/api", app)
 }

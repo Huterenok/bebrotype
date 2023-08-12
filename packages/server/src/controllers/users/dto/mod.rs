@@ -1,17 +1,38 @@
-use crate::entities::schema::users;
-use diesel::prelude::*;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Insertable)]
-#[diesel(table_name = users)]
+use crate::entities::User;
+
+#[derive(Serialize, Deserialize)]
+pub struct UserResponseDto {
+    pub id: i64,
+    pub username: String,
+    pub email: String,
+    pub avatar: Option<String>,
+    pub near_address: Option<String>,
+    pub favourite_texts: Vec<Option<i64>>,
+}
+
+impl Into<UserResponseDto> for User {
+    fn into(self) -> UserResponseDto {
+        UserResponseDto {
+            id: self.id,
+            username: self.username,
+            email: self.email,
+            avatar: self.avatar,
+            near_address: self.near_address,
+            favourite_texts: self.favourite_texts,
+        }
+    }
+}
+
+#[derive(Deserialize)]
 pub struct CreateUserDto {
     pub username: String,
     pub email: String,
     pub password: String,
 }
 
-#[derive(Deserialize, Insertable, AsChangeset)]
-#[diesel(table_name = users)]
+#[derive(Deserialize)]
 pub struct UpdateUserDto {
     pub near_address: Option<String>,
     pub avatar: Option<String>,
@@ -19,5 +40,5 @@ pub struct UpdateUserDto {
 
 #[derive(Deserialize)]
 pub struct AllUsersQuery {
-    pub limit: Option<usize>,
+    pub limit: Option<i64>,
 }

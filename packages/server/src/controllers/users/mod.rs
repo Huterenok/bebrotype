@@ -4,12 +4,13 @@ use axum::extract::{Multipart, Path, Query};
 use axum::routing::{get, patch};
 use axum::{Extension, Json, Router};
 
-use crate::entities::user::FilteredUser;
 use crate::entities::User;
+
+use dto::UserResponseDto;
 
 use crate::services::users::{get_all_users, get_user_by_id, update_user};
 
-use crate::repositories::error::Result;
+use crate::config::Result;
 
 use self::dto::AllUsersQuery;
 
@@ -25,12 +26,12 @@ pub fn create_private_user_routes() -> Router {
     Router::new().nest("/user", router)
 }
 
-async fn get_user_route(Path(id): Path<i32>) -> Result<Json<FilteredUser>> {
+async fn get_user_route(Path(id): Path<i64>) -> Result<Json<UserResponseDto>> {
     let res = get_user_by_id(id).await?.into();
     Ok(Json(res))
 }
 
-async fn get_all_users_route(query: Query<AllUsersQuery>) -> Result<Json<Vec<FilteredUser>>> {
+async fn get_all_users_route(query: Query<AllUsersQuery>) -> Result<Json<Vec<UserResponseDto>>> {
     let res = get_all_users(query.0)
         .await?
         .into_iter()
@@ -42,7 +43,7 @@ async fn get_all_users_route(query: Query<AllUsersQuery>) -> Result<Json<Vec<Fil
 async fn update_user_route(
     Extension(user): Extension<User>,
     data: Multipart,
-) -> Result<Json<FilteredUser>> {
+) -> Result<Json<UserResponseDto>> {
     let res = update_user(data, user).await?.into();
     Ok(Json(res))
 }

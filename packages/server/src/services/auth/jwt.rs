@@ -8,10 +8,10 @@ use serde::{Deserialize, Serialize};
 use chrono::{Duration, Utc};
 use jsonwebtoken::{decode, encode, Header};
 
-use crate::{entities::User, services::users::get_user_by_email};
+use crate::config::{Error, Result, CR};
+use crate::entities::User;
 
-use crate::repositories::crypto::CR;
-use crate::repositories::error::{Error, Result};
+use super::get_user_by_email;
 
 #[derive(Serialize, Deserialize)]
 struct Claims {
@@ -51,8 +51,9 @@ pub async fn generate_token(claims: &User) -> Result<String> {
 
     match encode(&Header::default(), &claims, &CR().await.jwt.encoding_key) {
         Ok(token) => Ok(token),
-        Err(err) => {
-            eprintln!("->> Error generating token: {:?}", err);
+        Err(_) => {
+						//TODO
+						tracing::error!("Error while encoding token");
             Err(Error::InternalServerError.into_response())
         }
     }
@@ -64,7 +65,6 @@ pub async fn validate_token(token: &str) -> Result<String> {
             jsonwebtoken::errors::ErrorKind::InvalidToken
             | jsonwebtoken::errors::ErrorKind::InvalidSignature
             | jsonwebtoken::errors::ErrorKind::ExpiredSignature => {
-                eprintln!("{:?}", error);
                 Error::NotAuthorized.into_response()
             }
             _ => Error::NotAuthorized.into_response(),

@@ -1,6 +1,6 @@
 use axum::response::IntoResponse;
 
-use crate::repositories::error::{Error, Result};
+use crate::config::error::{Error, Result};
 
 pub fn validate_image_file_format(content_type: &str) -> Result<()> {
     let file_format = content_type.split("/").collect::<Vec<&str>>()[1];

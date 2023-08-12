@@ -1,6 +1,5 @@
 use std::net::SocketAddr;
 
-use dotenv::dotenv;
 use tokio::sync::OnceCell;
 
 pub struct Env {
@@ -11,7 +10,7 @@ pub struct Env {
 }
 
 pub fn load_env() -> Env {
-    dotenv().ok();
+    dotenvy::dotenv().expect("Couldn't load ENV variables");
 
     let url_address = std::env::var("PORT")
         .expect("Env variable PORT was not provided")

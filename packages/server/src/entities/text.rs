@@ -8,9 +8,9 @@ use crate::entities::User;
 #[diesel(table_name = super::schema::texts)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct Text {
-    pub id: i32,
+    pub id: i64,
     pub title: String,
     pub content: String,
-    pub user_id: i32,
-		pub likes: i32,
+    pub user_id: i64,
+    pub likes: i32,
 }

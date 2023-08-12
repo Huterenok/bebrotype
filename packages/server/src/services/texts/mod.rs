@@ -1,121 +1,78 @@
 use axum::response::IntoResponse;
 
-use diesel::prelude::*;
-use diesel_async::RunQueryDsl;
+use crate::entities::Text;
 
-use crate::entities::schema::texts::dsl::{
-    id as text_id_column, likes as likes_column, texts as texts_table,
-};
-use crate::entities::schema::users::dsl::{
-    favourite_texts as favourite_texts_column, id as user_id_column, users as users_table,
-};
-use crate::entities::{Text, User};
+use crate::config::{Result, Error};
 
-use crate::controllers::texts::dto::CreateTextDto;
+use crate::controllers::texts::dto::{CreateTextDto, UpdateTextDto};
 
-use crate::repositories::database::DB;
-use crate::repositories::error::Error;
-use crate::repositories::error::Result;
+use super::users::{get_user_by_id, update_favourites};
 
-use super::users::get_user_by_id;
+use crate::repositories::texts::{create, get_by_id, get_by_user, update, update_likes};
 
-pub async fn get_text_by_id(text_id: i32) -> Result<Text> {
-    let mut conn = DB().await.get_conn().await?;
-
-    let result = texts_table
-        .find(text_id)
-        .select(Text::as_select())
-        .first(&mut conn)
-        .await;
-
-    match result {
-        Ok(text) => Ok(text),
-        Err(_) => Err(Error::TextByIdNotFound(text_id).into_response()),
-    }
-}
-
-pub async fn get_texts_by_user_id(user_id: i32) -> Result<Vec<Text>> {
-    let mut conn = DB().await.get_conn().await.unwrap();
-
-    let user = get_user_by_id(user_id).await?;
-    let data = Text::belonging_to(&user)
-        .select(Text::as_select())
-        .load(&mut conn)
-        .await;
-
-    match data {
-        Ok(texts) => match texts.len() {
-            0 => Err(Error::TextByUserIdNotFound(user_id).into_response()),
-            _ => Ok(texts),
-        },
-        Err(_) => Err(Error::TextByUserIdNotFound(user_id).into_response()),
-    }
-}
-
-pub async fn create_text(dto: CreateTextDto, user_id: i32) -> Result<Text> {
-    let mut conn = DB().await.get_conn().await?;
+pub async fn create_text(user_id: i64, dto: CreateTextDto) -> Result<Text> {
     let text = dto.into_text(user_id);
 
-    let result = diesel::insert_into(texts_table)
-        .values(&text)
-        .returning(Text::as_returning())
-        .get_result(&mut conn)
-        .await;
+    let res = create(text).await?;
+    Ok(res)
+}
 
-    match result {
-        Ok(text) => Ok(text),
-        Err(_) => Err(Error::UserAlreadyExist.into_response()),
-    }
+pub async fn get_text_by_id(id: i64) -> Result<Text> {
+    let res = get_by_id(id).await?;
+    Ok(res)
+}
+
+pub async fn get_texts_by_user_id(user_id: i64) -> Result<Vec<Text>> {
+    let user = get_user_by_id(user_id).await?;
+
+    let res = get_by_user(user).await?;
+    Ok(res)
 }
 
 //TODO: id shouldn't be Option<i32>
-pub async fn get_favourite_texts(text_ids: Vec<Option<i32>>) -> Result<Vec<Text>> {
+pub async fn get_favourite_texts(text_ids: Vec<Option<i64>>) -> Result<Vec<Text>> {
     let mut res: Vec<Text> = Vec::with_capacity(text_ids.len());
 
     for id in text_ids {
-        res.push(get_text_by_id(id.unwrap()).await?);
+        res.push(get_by_id(id.unwrap()).await?);
     }
 
     Ok(res)
 }
 
-//TODO: favourite_text_id shouldn't be Option<i32>
-//TODO: structure of route
-pub async fn toggle_favourite_text(text_id: i32, user: User) -> Result<bool> {
-    let mut conn = DB().await.get_conn().await?;
+pub async fn update_text(id: i64, user_id: i64, dto: UpdateTextDto) -> Result<Text> {
+		let text = get_text_by_id(id).await?;
+		match text.user_id == user_id {
+			true => (),
+			false => return Err(Error::NotAllowed.into_response())
+		};
 
-    let mut favourite_texts = user.favourite_texts;
-    let likes = get_text_by_id(text_id).await?.likes;
+    let res = update(id, dto).await?;
+    Ok(res)
+}
 
-    if favourite_texts.contains(&Some(text_id)) {
-        favourite_texts = favourite_texts
-            .into_iter()
-            .filter(|el| el.unwrap() != text_id)
-            .collect::<Vec<Option<i32>>>();
-        diesel::update(users_table.filter(user_id_column.eq(user.id)))
-            .set(favourite_texts_column.eq(favourite_texts))
-            .execute(&mut conn)
-            .await
-            .unwrap();
-        diesel::update(texts_table.filter(text_id_column.eq(text_id)))
-            .set(likes_column.eq(likes - 1))
-            .execute(&mut conn)
-            .await
-            .unwrap();
+pub async fn toggle_favourites(id: i64, user_id: i64) -> Result<bool> {
+    let likes = get_by_id(id).await?.likes;
+    let mut favourite_texts = get_user_by_id(user_id).await?.favourite_texts;
 
-        Ok(false)
-    } else {
-        favourite_texts.push(Some(text_id));
-        diesel::update(users_table.filter(user_id_column.eq(user.id)))
-            .set(favourite_texts_column.eq(favourite_texts))
-            .execute(&mut conn)
-            .await
-            .unwrap();
-        diesel::update(texts_table.filter(text_id_column.eq(text_id)))
-            .set(likes_column.eq(likes + 1))
-            .execute(&mut conn)
-            .await
-            .unwrap();
-        Ok(true)
-    }
+    //TODO
+    match favourite_texts.contains(&Some(id)) {
+        true => {
+            update_likes(id, likes - 1).await?;
+            favourite_texts = favourite_texts
+                .into_iter()
+                .filter(|text_id| text_id.unwrap() != id)
+                .collect::<Vec<Option<i64>>>();
+            update_favourites(user_id, favourite_texts).await?;
+
+            return Ok(false);
+        }
+        false => {
+            update_likes(id, likes + 1).await?;
+            favourite_texts.push(Some(id));
+            update_favourites(user_id, favourite_texts).await?;
+
+            return Ok(true);
+        }
+    };
 }

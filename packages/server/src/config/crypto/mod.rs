@@ -4,8 +4,8 @@ use jsonwebtoken::{Algorithm, DecodingKey, EncodingKey, Validation};
 use magic_crypt::{new_magic_crypt, MagicCrypt256, MagicCryptTrait};
 use tokio::sync::OnceCell;
 
-use crate::repositories::env::ENV;
-use crate::repositories::error::{Error, Result};
+use super::env::ENV;
+use super::error::{Error, Result};
 
 pub struct Jwt {
     pub decoding_key: DecodingKey,
@@ -36,8 +36,9 @@ impl Coder {
     pub fn mc_decrypt(&self, str: &str) -> Result<String> {
         match self.mc.decrypt_base64_to_string(str) {
             Ok(decrypted) => Ok(decrypted),
-            Err(err) => {
-                eprintln!("->> Error while mc_decrypting: {:?}", err);
+            Err(_) => {
+								//TODO
+								tracing::error!("Error while mc decrypting");
                 Err(Error::InternalServerError.into_response())
             }
         }

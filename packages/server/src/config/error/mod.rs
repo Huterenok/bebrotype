@@ -14,7 +14,7 @@ pub enum Error {
     WrongFileFormat(String),
     BadOrganisedUserForm,
 
-    UserByIdNotFound(i32),
+    UserByIdNotFound(i64),
     UserByEmailNotFound(String),
     UserByUsernameNotFound(String),
     //TODO
@@ -22,8 +22,8 @@ pub enum Error {
     UsersNotFound,
 
     TextCreationFail,
-    TextByIdNotFound(i32),
-    TextByUserIdNotFound(i32),
+    TextByIdNotFound(i64),
+    TextByUserIdNotFound(i64),
 
     AuthWrongCredentials,
     NotAuthorized,

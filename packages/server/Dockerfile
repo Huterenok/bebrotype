@@ -1,21 +1,27 @@
-FROM rust:1.60 as build
+FROM rust:1-slim-bullseye AS builder
+WORKDIR /code
 
-RUN USER=root cargo new --bin server
-WORKDIR /server
+RUN USER=root apt update
+RUN USER=root apt install libssl-dev pkg-config libpq-dev -y
 
-COPY ./Cargo.lock ./Cargo.lock
-COPY ./Cargo.toml ./Cargo.toml
+COPY Cargo.toml .
+RUN cargo fetch
+
+COPY src ./src
+COPY migrations ./migrations
+
 RUN cargo build --release
 
-RUN rm src/*.rs
-COPY ./src ./src
-
-RUN rm ./target/release/deps/server*
-RUN cargo build --release
-
-FROM debian:buster-slim
-RUN mkdir /server
+FROM debian:bullseye-slim
 WORKDIR /server
-COPY --from=build /server/target/release/server .
 
-CMD ["./server"]
+RUN USER=root apt update
+RUN USER=root apt install openssl libpq5 -y
+
+COPY --from=builder /code/target/release/server server
+
+USER 1001
+
+EXPOSE 3001
+
+CMD [ "/server" ]

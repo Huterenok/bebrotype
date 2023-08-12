@@ -5,7 +5,7 @@ use axum::{Json, Router};
 
 use crate::services::auth::{login, register};
 
-use crate::repositories::error::Result;
+use crate::config::Result;
 
 use self::dto::{AuthPayload, LoginDto};
 

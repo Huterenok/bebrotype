@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 
-use crate::entities::user::FilteredUser;
+use crate::controllers::users::dto::UserResponseDto;
 
 #[derive(Deserialize)]
 pub struct LoginDto {
@@ -11,11 +11,11 @@ pub struct LoginDto {
 #[derive(Serialize)]
 pub struct AuthPayload {
     pub token: String,
-    pub user: FilteredUser,
+    pub user: UserResponseDto,
 }
 
 impl AuthPayload {
-    pub fn new(token: String, user: FilteredUser) -> Self {
+    pub fn new(token: String, user: UserResponseDto) -> Self {
         AuthPayload { token, user }
     }
 }

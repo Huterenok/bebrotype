@@ -7,7 +7,7 @@ use diesel_async::AsyncPgConnection;
 use tokio::sync::OnceCell;
 
 use super::env::ENV;
-use crate::repositories::error::{Error, Result};
+use super::error::{Error, Result};
 
 pub struct Connector {
     pub pool: Pool<AsyncPgConnection>,
@@ -25,8 +25,9 @@ impl Connector {
     pub async fn get_conn(&self) -> Result<Object<AsyncPgConnection>> {
         match self.pool.get().await {
             Ok(pool) => Ok(pool),
-            Err(err) => {
-                eprintln!("->> Error getting database connection: {:?}", err);
+            Err(_) => {
+                //TODO
+                tracing::error!("Error while getting connection");
                 Err(Error::InternalServerError.into_response())
             }
         }
