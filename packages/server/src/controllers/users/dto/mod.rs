@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use validator::Validate;
 
 use crate::entities::User;
 
@@ -25,10 +26,21 @@ impl Into<UserResponseDto> for User {
     }
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Validate)]
 pub struct CreateUserDto {
+    #[validate(length(
+        min = 6,
+        max = 24,
+        message = "Username must consist of 6 to 24 characters"
+    ))]
     pub username: String,
+    #[validate(email)]
     pub email: String,
+    #[validate(length(
+        min = 6,
+        max = 24,
+        message = "Password must consist of 6 to 24 characters"
+    ))]
     pub password: String,
 }
 
@@ -38,7 +50,8 @@ pub struct UpdateUserDto {
     pub avatar: Option<String>,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Validate)]
 pub struct AllUsersQuery {
+    #[validate(range(min = 10, max = 50, message = "Limit must be in range from 10 to 50"))]
     pub limit: Option<i64>,
 }

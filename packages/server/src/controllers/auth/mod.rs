@@ -5,7 +5,7 @@ use axum::{Json, Router};
 
 use crate::services::auth::{login, register};
 
-use crate::config::Result;
+use crate::config::{Result, ValidatedJson};
 
 use self::dto::{AuthPayload, LoginDto};
 
@@ -18,7 +18,7 @@ pub fn create_auth_routes() -> Router {
     Router::new().nest("/auth", router)
 }
 
-async fn register_route(Json(dto): Json<CreateUserDto>) -> Result<Json<AuthPayload>> {
+async fn register_route(ValidatedJson(dto): ValidatedJson<CreateUserDto>) -> Result<Json<AuthPayload>> {
     match register(dto).await {
         Ok(data) => Ok(Json(data)),
         Err(err) => Err(err),

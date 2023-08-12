@@ -12,3 +12,6 @@ pub use crypto::CR;
 
 pub mod database;
 pub use database::DB;
+
+pub mod validator;
+pub use crate::config::validator::ValidatedJson;

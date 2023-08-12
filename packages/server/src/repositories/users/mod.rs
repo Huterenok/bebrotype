@@ -91,7 +91,7 @@ pub async fn update(id: i64, dto: UpdateUserDto) -> Result<User> {
     match res {
         Ok(user) => Ok(user.into()),
         //TODO
-        Err(_) => Err(Error::UserAlreadyExist.into_response()),
+        Err(_) => Err(Error::NearUserAlreadyExist.into_response()),
     }
 }
 

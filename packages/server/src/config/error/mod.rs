@@ -10,6 +10,8 @@ pub type Result<T> = core::result::Result<T, Response>;
 pub enum Error {
     InternalServerError,
 
+    InvalidBody(String),
+
     BadOrganisedToken,
     WrongFileFormat(String),
     BadOrganisedUserForm,
@@ -19,6 +21,7 @@ pub enum Error {
     UserByUsernameNotFound(String),
     //TODO
     UserAlreadyExist,
+    NearUserAlreadyExist,
     UsersNotFound,
 
     TextCreationFail,
@@ -38,6 +41,8 @@ impl IntoResponse for Error {
                 "Server internal error".to_string(),
             ),
 
+            Error::InvalidBody(error) => (StatusCode::BAD_REQUEST, error),
+
             Error::BadOrganisedToken => (
                 StatusCode::BAD_REQUEST,
                 "Token must match: Bearer token".to_string(),
@@ -50,6 +55,10 @@ impl IntoResponse for Error {
             Error::UserAlreadyExist => (
                 StatusCode::BAD_REQUEST,
                 "User with this email or username already exists".to_string(),
+            ),
+            Error::NearUserAlreadyExist => (
+                StatusCode::BAD_REQUEST,
+                "User with this near_address already exists".to_string(),
             ),
             Error::UserByIdNotFound(id) => (
                 StatusCode::NOT_FOUND,

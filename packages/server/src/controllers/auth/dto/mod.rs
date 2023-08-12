@@ -1,10 +1,17 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
+use validator::Validate;
 
 use crate::controllers::users::dto::UserResponseDto;
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Validate)]
 pub struct LoginDto {
+    #[validate(email)]
     pub email: String,
+    #[validate(length(
+        min = 6,
+        max = 24,
+        message = "Password must consist of 6 to 24 characters"
+    ))]
     pub password: String,
 }
 

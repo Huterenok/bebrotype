@@ -69,7 +69,7 @@ pub async fn update_user(mut multipart: Multipart, user: User) -> Result<User> {
             "near_address" => match field.text().await {
                 Ok(address) if address.len() > 0 => user_near_address = Some(address),
                 //TODO
-                Ok(_) => user_near_address = None,
+                Ok(_) => (),
                 Err(_) => return Err(Error::BadOrganisedUserForm.into_response()),
             },
             _ => return Err(Error::BadOrganisedUserForm.into_response()),
