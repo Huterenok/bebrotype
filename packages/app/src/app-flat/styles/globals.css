@@ -24,13 +24,13 @@
     var(--dark-green)
   );
   --toastify-toast-background: var(--sage);
-	--toastify-color-light: var(--sage);
+  --toastify-color-light: var(--sage);
   --toastify-text-color-light: var(--dark-green);
 }
 
 @font-face {
-	font-family: "Raleway Bebra";
-	src: url(./fonts/Raleway-Regular.ttf) format("ttf");
+  font-family: "Raleway Bebra";
+  src: url(./fonts/Raleway-Regular.ttf) format("ttf");
 }
 
 * {
@@ -55,7 +55,7 @@ body {
 
   background-color: var(--light-green);
 
-	font-family: "Raleway Bebra", sans-serif;
+  font-family: "Raleway Bebra", sans-serif;
   font-size: var(--font-m);
   color: var(--dark-green);
 
@@ -73,6 +73,14 @@ body {
 
 .pages_wrapper {
   padding: 32px 24px;
+}
+
+.error_wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
 }
 
 ::selection {

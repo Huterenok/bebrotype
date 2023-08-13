@@ -1,15 +1,11 @@
-import {
-  createStore,
-  createEffect,
-} from "effector";
+import { createStore, createEffect } from "effector";
 
 import { IUser } from "enities/User";
 
 import { modalToggle } from "./modal";
 
-import { ILoginRequest, IRegisterRequest, IUserResponse } from "../types";
+import { login, register, IRegisterRequest, ILoginRequest } from "../api";
 
-import { request } from "shared/api";
 import { toast } from "react-toastify";
 import { setToken } from "shared/lib/token";
 
@@ -17,43 +13,31 @@ export const $user = createStore<IUser | null>(null);
 
 export const registerFx = createEffect(
   async (registerRequest: IRegisterRequest) => {
-    let res = await request<IUserResponse>({
-      endpoint: "auth/register",
-      body: registerRequest,
-      method: "POST",
-    });
-    return res;
+    return await register(registerRequest);
   }
 );
 export const loginFx = createEffect(async (loginRequest: ILoginRequest) => {
-  let res = await request<IUserResponse>({
-    endpoint: "auth/login",
-    body: loginRequest,
-    method: "POST",
-  });
-  return res;
+  return await login(loginRequest);
 });
 
 $user.on(loginFx.doneData, (_, payload) => {
+	toast.success("Successfully logged in!");
+  setToken(payload.token);
+  modalToggle();
+  return payload.user;
+});
+$user.on(registerFx.doneData, (_, payload) => {
   toast.success("Successfully registered!");
   setToken(payload.token);
   modalToggle();
-  return payload?.user;
-});
-$user.on(registerFx.doneData, (_, payload) => {
-  toast.success("Successfully logged in!");
-  setToken(payload.token);
-  modalToggle();
-  return payload?.user;
+  return payload.user;
 });
 
-$user.watch((state) => {
-	console.log(state)
-})
+$user.on(registerFx.failData, (_, payload) => {
+  toast.error(payload.message);
+});
+$user.on(loginFx.failData, (_, payload) => {
+  toast.error(payload.message);
+});
 
-loginFx.failData.watch((payload) => {
-  toast.error(payload.message);
-});
-registerFx.failData.watch((payload) => {
-  toast.error(payload.message);
-});
+
