@@ -27,6 +27,7 @@ pub enum Error {
     TextCreationFail,
     TextByIdNotFound(i64),
     TextByUserIdNotFound(i64),
+    DontHaveLikedTexts,
 
     AuthWrongCredentials,
     NotAuthorized,
@@ -85,6 +86,10 @@ impl IntoResponse for Error {
             Error::TextCreationFail => (
                 StatusCode::INTERNAL_SERVER_ERROR,
                 "Couldn't create text".to_string(),
+            ),
+            Error::DontHaveLikedTexts => (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                "You don't have any liked texts".to_string(),
             ),
 
             Error::NotAuthorized => (

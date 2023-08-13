@@ -11,7 +11,7 @@ use crate::controllers::users::dto::{
     AllUsersQuery, CreateUserDto, UpdateUserDto,
 };
 
-use crate::repositories::users::{create, get_all, get_by_email, get_by_id, update, update_favourites_texts};
+use crate::repositories::users::{create, get_all, get_by_email, get_by_id, update};
 
 use crate::utils::validate_image_file_format;
 
@@ -85,7 +85,7 @@ pub async fn update_user(mut multipart: Multipart, user: User) -> Result<User> {
     Ok(res.into())
 }
 
-pub async fn update_favourites(id: i64, favourite_texts: Vec<Option<i64>>) -> Result<Vec<Option<i64>>> {
-	let res = update_favourites_texts(id, favourite_texts).await?;
-	Ok(res)
-}
+// pub async fn update_favourites(id: i64, favourite_texts: Vec<Option<i64>>) -> Result<Vec<Option<i64>>> {
+// 	let res = update_favourites_texts(id, favourite_texts).await?;
+// 	Ok(res)
+// }

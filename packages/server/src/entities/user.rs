@@ -9,6 +9,5 @@ pub struct User {
     pub email: String,
     pub password: String,
     pub avatar: Option<String>,
-    pub near_address: Option<String>,
-    pub favourite_texts: Vec<Option<i64>>,
+    pub near_address: Option<String>
 }

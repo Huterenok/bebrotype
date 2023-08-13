@@ -9,8 +9,7 @@ pub struct UserResponseDto {
     pub username: String,
     pub email: String,
     pub avatar: Option<String>,
-    pub near_address: Option<String>,
-    pub favourite_texts: Vec<Option<i64>>,
+    pub near_address: Option<String>
 }
 
 impl Into<UserResponseDto> for User {
@@ -20,8 +19,7 @@ impl Into<UserResponseDto> for User {
             username: self.username,
             email: self.email,
             avatar: self.avatar,
-            near_address: self.near_address,
-            favourite_texts: self.favourite_texts,
+            near_address: self.near_address
         }
     }
 }

@@ -5,7 +5,7 @@ use diesel_async::RunQueryDsl;
 
 use crate::entities::schema::users::{
     avatar as avatar_column, dsl::users as users_table, email as email_column,
-    favourite_texts as favourite_texts_column, id as id_column,
+     id as id_column,
     near_address as near_address_column, password as password_column, username as username_column,
 };
 use crate::entities::User;
@@ -95,17 +95,17 @@ pub async fn update(id: i64, dto: UpdateUserDto) -> Result<User> {
     }
 }
 
-pub async fn update_favourites_texts(id: i64, texts: Vec<Option<i64>>) -> Result<Vec<Option<i64>>> {
-    let mut conn = DB().await.get_conn().await?;
+// pub async fn update_favourites_texts(id: i64, texts: Vec<Option<i64>>) -> Result<Vec<Option<i64>>> {
+//     let mut conn = DB().await.get_conn().await?;
 
-    let res = diesel::update(users_table.filter(id_column.eq(id)))
-        .set(favourite_texts_column.eq(texts))
-        .get_result::<User>(&mut conn)
-        .await;
+//     let res = diesel::update(users_table.filter(id_column.eq(id)))
+//         .set(favourite_texts_column.eq(texts))
+//         .get_result::<User>(&mut conn)
+//         .await;
 
-    match res {
-        Ok(user) => Ok(user.favourite_texts),
-        //TODO
-        Err(_) => Err(Error::UserAlreadyExist.into_response()),
-    }
-}
+//     match res {
+//         Ok(user) => Ok(user.favourite_texts),
+//         //TODO
+//         Err(_) => Err(Error::UserAlreadyExist.into_response()),
+//     }
+// }
