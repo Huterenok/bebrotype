@@ -18,16 +18,14 @@ pub fn create_auth_routes() -> Router {
     Router::new().nest("/auth", router)
 }
 
-async fn register_route(ValidatedJson(dto): ValidatedJson<CreateUserDto>) -> Result<Json<AuthPayload>> {
-    match register(dto).await {
-        Ok(data) => Ok(Json(data)),
-        Err(err) => Err(err),
-    }
+async fn register_route(
+    ValidatedJson(dto): ValidatedJson<CreateUserDto>,
+) -> Result<Json<AuthPayload>> {
+    let res = register(dto).await?;
+    Ok(Json(res))
 }
 
-async fn login_route(Json(dto): Json<LoginDto>) -> Result<Json<AuthPayload>> {
-    match login(dto).await {
-        Ok(data) => Ok(Json(data)),
-        Err(err) => Err(err),
-    }
+async fn login_route(ValidatedJson(dto): ValidatedJson<LoginDto>) -> Result<Json<AuthPayload>> {
+    let res = login(dto).await?;
+    Ok(Json(res))
 }

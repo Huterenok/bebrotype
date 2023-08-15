@@ -1,16 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useEvent, useUnit } from "effector-react";
-import { FC, useEffect } from "react";
+import { useUnit } from "effector-react";
+import { FC } from "react";
 
-import { $user, modalToggle } from "../../model";
+import { $user } from "enities/User";
+import { modalToggle } from "../../model";
 
 import { Button, ButtonColor } from "shared/ui";
 
 export const AuthButton: FC = () => {
   const user = useUnit($user);
-  const modalToggleFn = useEvent(modalToggle);
+  const modalToggleFn = useUnit(modalToggle);
 
   const onAuthClick = () => {
     modalToggleFn();

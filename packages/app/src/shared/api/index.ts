@@ -6,7 +6,7 @@ export const API_URL = process.env.API_URL;
 interface IRequest {
   endpoint: string;
   body?: unknown;
-  method?: "POST" | "GET" | "PATCH" | "DELETE"
+  method?: "POST" | "GET" | "PATCH" | "DELETE";
 }
 
 const defaultHeaders = new Headers();
@@ -17,11 +17,11 @@ defaultFDHeaders.set("Content-Type", "multipart/form-data");
 
 const connector = ky.create({
   prefixUrl: process.env.NEXT_PUBLIC_API_URL,
-	throwHttpErrors: false
+  throwHttpErrors: false,
 });
 
 export async function request<R>(params: IRequest): Promise<R> {
-  let { endpoint, method = "GET", body = {}} = params;
+  let { endpoint, method = "GET", body = {} } = params;
 
   const token = getToken();
   if (token) {
@@ -30,7 +30,7 @@ export async function request<R>(params: IRequest): Promise<R> {
 
   const response = await connector(endpoint, {
     method,
-    body: JSON.stringify(body),
+    body: method == "GET" ? null : JSON.stringify(body),
     headers: defaultHeaders,
   });
 
@@ -42,7 +42,7 @@ export async function request<R>(params: IRequest): Promise<R> {
 }
 
 export async function requestFD<R>(params: IRequest): Promise<R> {
-	let { endpoint, method = "PATCH", body = new FormData()} = params;
+  let { endpoint, method = "PATCH", body = new FormData() } = params;
 
   const token = getToken();
   if (token) {

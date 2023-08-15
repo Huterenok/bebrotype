@@ -1,4 +1,5 @@
 -- Your SQL goes here
+-- Your SQL goes here
 CREATE TABLE users (
 	id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   username TEXT UNIQUE NOT NULL,
@@ -7,6 +8,8 @@ CREATE TABLE users (
 	avatar TEXT,
 	near_address TEXT UNIQUE
 );
+
+CREATE INDEX idx_email ON users (email);
 
 CREATE TABLE texts (
 	id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,

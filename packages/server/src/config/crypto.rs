@@ -1,8 +1,8 @@
 use axum::response::IntoResponse;
-
-use jsonwebtoken::{Algorithm, DecodingKey, EncodingKey, Validation};
-use magic_crypt::{new_magic_crypt, MagicCrypt256, MagicCryptTrait};
 use tokio::sync::OnceCell;
+
+use bcrypt::{hash, verify};
+use jsonwebtoken::{Algorithm, DecodingKey, EncodingKey, Validation};
 
 use super::env::ENV;
 use super::error::{Error, Result};
@@ -14,31 +14,36 @@ pub struct Jwt {
 }
 
 pub struct Coder {
-    pub mc: MagicCrypt256,
     pub jwt: Jwt,
 }
 
+const DEFAULT_COST: u32 = 4;
+
 impl Coder {
     async fn new() -> Self {
-        let mc = new_magic_crypt!(&ENV().await.secret_magic_key, 256);
         let jwt = Jwt {
             decoding_key: DecodingKey::from_secret(ENV().await.secret_jwt_key.as_bytes()),
             encoding_key: EncodingKey::from_secret(ENV().await.secret_jwt_key.as_bytes()),
             validation: Validation::new(Algorithm::HS256),
         };
-        Coder { mc, jwt }
+        Coder { jwt }
     }
 
-    pub fn mc_encrypt(&self, str: &str) -> String {
-        self.mc.encrypt_str_to_base64(str)
+    pub fn encrypt(str: &str) -> Result<String> {
+        match hash(str, DEFAULT_COST) {
+            Ok(hashed) => Ok(hashed),
+            Err(err) => {
+                tracing::error!("Error while encrypting: {}", err);
+                Err(Error::InternalServerError.into_response())
+            }
+        }
     }
 
-    pub fn mc_decrypt(&self, str: &str) -> Result<String> {
-        match self.mc.decrypt_base64_to_string(str) {
-            Ok(decrypted) => Ok(decrypted),
-            Err(_) => {
-								//TODO
-								tracing::error!("Error while mc decrypting");
+    pub fn decrypt(str: &str, hashed_part: &str) -> Result<bool> {
+        match verify(str, hashed_part) {
+            Ok(is_equal) => Ok(is_equal),
+            Err(err) => {
+                tracing::error!("Error while decrypting: {}", err);
                 Err(Error::InternalServerError.into_response())
             }
         }

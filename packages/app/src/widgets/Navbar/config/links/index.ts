@@ -8,11 +8,6 @@ export const socLinks: ISocLink[] = [
     img: "/icons/tg.svg",
   },
   {
-    alt: "VK",
-    href: "https://vk.com/huterenok",
-    img: "/icons/vk.svg",
-  },
-  {
     alt: "Discord",
     href: "https://discordapp.com/users/543459187460669471",
     img: "/icons/discord.svg",

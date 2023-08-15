@@ -1,7 +1,9 @@
+"use client";
+
 import { Suspense } from "react";
 
-import { Navbar, Header } from "widgets";
 import { Providers } from "app-flat/providers";
+import { Navbar, Header } from "widgets";
 import { Loader } from "shared/ui";
 
 import "app-flat/styles/globals.css";

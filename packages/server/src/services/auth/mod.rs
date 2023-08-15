@@ -2,7 +2,7 @@ pub mod jwt;
 
 use axum::response::IntoResponse;
 
-use crate::config::{Error, Result, CR};
+use crate::config::{Error, Result, Coder};
 
 use crate::controllers::auth::dto::{AuthPayload, LoginDto};
 use crate::controllers::users::dto::CreateUserDto;
@@ -21,7 +21,7 @@ pub async fn register(register_request: CreateUserDto) -> Result<AuthPayload> {
 pub async fn login(login_body: LoginDto) -> Result<AuthPayload> {
     let user = get_user_by_email(login_body.email).await?;
 
-    if login_body.password != CR().await.mc_decrypt(&user.password)? {
+    if !Coder::decrypt(&login_body.password, &user.password)? {
         return Err(Error::AuthWrongCredentials.into_response());
     }
 

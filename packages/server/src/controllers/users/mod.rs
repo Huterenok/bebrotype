@@ -2,7 +2,7 @@ pub mod dto;
 
 use axum::extract::{Multipart, Path, Query};
 use axum::routing::{get, patch};
-use axum::{Extension, Json, Router};
+use axum::{Extension, Json, Router, debug_handler};
 
 use crate::entities::User;
 
@@ -22,8 +22,14 @@ pub fn create_public_user_routes() -> Router {
 }
 
 pub fn create_private_user_routes() -> Router {
-    let router = Router::new().route("/edit", patch(update_user_route));
+    let router = Router::new()
+        .route("/edit", patch(update_user_route))
+        .route("/whoami", get(whoami));
     Router::new().nest("/user", router)
+}
+
+pub async fn whoami(Extension(user): Extension<User>) -> Result<Json<UserResponseDto>> {
+    Ok(Json(user.into()))
 }
 
 async fn get_user_route(Path(id): Path<i64>) -> Result<Json<UserResponseDto>> {

@@ -1,6 +1,6 @@
 import { createEffect, createEvent, createStore, sample } from "effector";
 import { Form, createForm } from "effector-forms";
-import { loginFx, registerFx } from "./user";
+import { loginFx, registerFx } from "./auth";
 
 export enum FormType {
   LOGIN = "Login",
@@ -49,7 +49,7 @@ export const authForm = createForm({
         {
           name: "username",
           validator: (value: string) => {
-						//TODO: getState - bad practice
+            //TODO: getState - bad practice
             if ($formCond.getState() == FormType.LOGIN) {
               return true;
             }
@@ -64,6 +64,7 @@ export const authForm = createForm({
 });
 
 export const formFx = createEffect((params: AuthForm) => {
+  //TODO
   if ($formCond.getState() == FormType.LOGIN) {
     loginFx({ email: params.email, password: params.password });
   } else {

@@ -4,7 +4,7 @@ use tokio::io::AsyncWriteExt;
 
 use axum::extract::Multipart;
 
-use crate::config::{Error, Result, CR};
+use crate::config::{Error, Result, Coder};
 use crate::entities::User;
 
 use crate::controllers::users::dto::{
@@ -16,7 +16,7 @@ use crate::repositories::users::{create, get_all, get_by_email, get_by_id, updat
 use crate::utils::validate_image_file_format;
 
 pub async fn create_user(mut dto: CreateUserDto) -> Result<User> {
-    dto.password = CR().await.mc_encrypt(&dto.password);
+    dto.password = Coder::encrypt(&dto.password)?;
     let res = create(dto).await?;
     Ok(res.into())
 }
