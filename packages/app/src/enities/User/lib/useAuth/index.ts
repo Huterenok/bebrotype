@@ -1,16 +1,18 @@
+"use client";
+
 import { useUnit } from "effector-react";
 import { useRouter } from "next/navigation";
 
 import { $user } from "enities/User/model";
+import { useEffect } from "react";
 
-export const useAuth = (): boolean => {
+export const useAuth = () => {
   const router = useRouter();
   const user = useUnit($user);
 
-  if (!user) {
-    router.replace("/");
-    return false;
-  }
-
-  return true;
+  useEffect(() => {
+    if (!user) {
+      router.replace("/");
+    }
+  });
 };

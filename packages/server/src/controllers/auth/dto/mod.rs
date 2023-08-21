@@ -5,7 +5,7 @@ use crate::controllers::users::dto::UserResponseDto;
 
 #[derive(Deserialize, Validate)]
 pub struct LoginDto {
-    #[validate(email)]
+    #[validate(email(message = "Email must be valid"))]
     pub email: String,
     #[validate(length(
         min = 6,

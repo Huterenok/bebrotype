@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "enities/User/lib/useAuth";
+import { useAuth } from "enities/User";
 
 export default function ProfileLayout({
   children,

@@ -1,10 +1,5 @@
-"use client";
-
-import { Suspense } from "react";
-
 import { Providers } from "app-flat/providers";
 import { Navbar, Header } from "widgets";
-import { Loader } from "shared/ui";
 
 import "app-flat/styles/globals.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,9 +16,7 @@ export default function RootLayout({
           <div className="layout">
             <Navbar />
             <Header />
-            <Suspense fallback={<Loader />}>
-              <div className="pages_wrapper">{children}</div>
-            </Suspense>
+            <div className="pages_wrapper">{children}</div>
           </div>
         </Providers>
       </body>

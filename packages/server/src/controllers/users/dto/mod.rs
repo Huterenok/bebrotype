@@ -32,7 +32,7 @@ pub struct CreateUserDto {
         message = "Username must consist of 6 to 24 characters"
     ))]
     pub username: String,
-    #[validate(email)]
+    #[validate(email(message = "Email must be valid"))]
     pub email: String,
     #[validate(length(
         min = 6,

@@ -1,5 +1,7 @@
 import { Metadata } from "next";
 
+import { ProfileInfo } from "widgets";
+
 import styles from "app-flat/styles/page-styles/Profile.module.css";
 
 export const metadata: Metadata = {
@@ -10,7 +12,7 @@ export const metadata: Metadata = {
 export default function ProfilePage() {
   return (
     <div className={styles.wrapper}>
-			profile
+      <ProfileInfo />
     </div>
   );
 }

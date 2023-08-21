@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useUnit } from "effector-react";
-import { FC } from "react";
+import { FC, Suspense } from "react";
 
 import { $user } from "enities/User";
 import { modalToggle } from "../../model";
@@ -19,7 +20,15 @@ export const AuthButton: FC = () => {
 
   return user ? (
     <Link href={"/profile"}>
-      <Button color={ButtonColor.PRIME}>Profile</Button>
+        <Button color={ButtonColor.PRIME}>
+          Profile
+          <Image
+            src="/icons/profile.svg"
+            alt="Profile"
+            width={20}
+            height={20}
+          />
+        </Button>
     </Link>
   ) : (
     <Button onClick={onAuthClick} color={ButtonColor.PRIME}>

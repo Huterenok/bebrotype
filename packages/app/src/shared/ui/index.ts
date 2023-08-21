@@ -10,3 +10,4 @@ export { SocLink } from "./SocLink";
 export type { ISocLink } from "./SocLink";
 export { Text } from "./Text";
 export { Title } from "./Title";
+export {Skeleton} from "./Skeleton"
