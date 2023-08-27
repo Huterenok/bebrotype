@@ -3,7 +3,6 @@ use axum::response::IntoResponse;
 use diesel::prelude::*;
 use diesel_async::RunQueryDsl;
 
-use crate::config::{Error, Result, DB};
 use crate::entities::liked_text::LikedText;
 use crate::entities::schema::liked_texts::{
     dsl::liked_texts as liked_texts_table, text_id as text_id_liked_column,
@@ -13,9 +12,13 @@ use crate::entities::schema::texts::{
     content as content_column, dsl::texts as texts_table, id as text_id_column,
     likes as likes_column, title as title_column, user_id as user_id_column,
 };
-use crate::entities::{Text, User};
 
-use crate::controllers::texts::dto::{TextDto, UpdateTextDto};
+use crate::{
+    common::{Error, Result},
+    config::DB,
+    controllers::texts::dto::{TextDto, UpdateTextDto},
+    entities::{Text, User},
+};
 
 pub async fn create(dto: TextDto) -> Result<Text> {
     let mut conn = DB().await.get_conn().await?;
@@ -102,7 +105,7 @@ pub async fn update(text: &Text, dto: UpdateTextDto) -> Result<Text> {
 
 pub async fn like(id: i64, user_id: i64) -> Result<Text> {
     let mut conn = DB().await.get_conn().await?;
-		let text = get_by_id(id).await?;
+    let text = get_by_id(id).await?;
 
     match diesel::insert_into(liked_texts_table)
         .values((
@@ -110,11 +113,12 @@ pub async fn like(id: i64, user_id: i64) -> Result<Text> {
             text_id_liked_column.eq(id),
         ))
         .execute(&mut conn)
-        .await {
-            Ok(_) => (),
-						//TODO
-            Err(_) => return Err(Error::TextByIdNotFound(id).into_response()),
-        };
+        .await
+    {
+        Ok(_) => (),
+        //TODO
+        Err(_) => return Err(Error::TextByIdNotFound(id).into_response()),
+    };
 
     let res = diesel::update(&text)
         .set(likes_column.eq(text.likes + 1))

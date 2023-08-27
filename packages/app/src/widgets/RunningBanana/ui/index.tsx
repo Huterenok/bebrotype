@@ -2,11 +2,11 @@
 import { FC } from "react";
 
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Stage } from "@react-three/drei";
+import { Stage } from "@react-three/drei";
 
 import { Banana } from "shared/ui/Banana";
 
-import styles from "./RunningBanana.module.css";
+import styles from "./RunningBanana.module.scss";
 
 export const RunningBanana: FC = () => {
   return (

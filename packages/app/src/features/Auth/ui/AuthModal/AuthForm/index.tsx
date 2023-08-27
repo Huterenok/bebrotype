@@ -1,34 +1,27 @@
-import { FC, useState } from "react";
+import Image from "next/image";
+import { FC } from "react";
 import { useForm } from "effector-forms";
 import { useUnit } from "effector-react";
 
 import {
   authForm,
   $formCond,
-  FormType,
+  FormCondition,
   toggleFormCond,
-} from "../../model";
+  googleOAuthFx,
+} from "../../../model";
 
-import { Button, Input, Title } from "shared/ui";
+import { Button, Input } from "shared/ui";
 
 import styles from "./AuthForm.module.scss";
-import {} from "../../model/form";
-import { toast } from "react-toastify";
 
 export const AuthForm: FC = () => {
-  const { fields, submit, hasError, errorText } = useForm(authForm);
+  const { fields, submit } = useForm(authForm);
   const [formCond, toggleFormCondFn] = useUnit([$formCond, toggleFormCond]);
+  const googleOAuth = useUnit(googleOAuthFx);
 
   const onSubmit = (e: React.MouseEvent) => {
     e.preventDefault();
-		//TODO: Better error displaying
-    if (hasError("email")) {
-      return toast.error(errorText("email"));
-    } else if (hasError("password")) {
-      return toast.error(errorText("password"));
-    } else if (hasError("username")) {
-      return toast.error(errorText("username"));
-    }
     submit();
   };
 
@@ -40,7 +33,7 @@ export const AuthForm: FC = () => {
     <div className={styles.wrapper}>
       <div className={styles.top}>
         <Button onClick={onChangeFormCond} className={styles.btn}>
-          {formCond == FormType.LOGIN ? "To Registration" : "To Login"}
+          {formCond == FormCondition.LOGIN ? "To Registration" : "To Login"}
         </Button>
         <h1 className={styles.title}>{formCond.concat(" Form")}</h1>
       </div>
@@ -55,7 +48,7 @@ export const AuthForm: FC = () => {
           value={fields.password.value}
           placeholder="Password"
         />
-        {formCond == FormType.REGISTRATION && (
+        {formCond == FormCondition.REGISTRATION && (
           <Input
             onChange={(e) => fields.username.onChange(e.target.value)}
             value={fields.username.value}
@@ -63,6 +56,15 @@ export const AuthForm: FC = () => {
           />
         )}
         <Button onClick={onSubmit}>{"Let's start"}</Button>
+        <h1>or</h1>
+        <Image
+          onClick={googleOAuth}
+          width={48}
+          height={48}
+          src={"/icons/google.svg"}
+          alt="Google Authorization"
+          className={styles.google}
+        />
       </form>
     </div>
   );

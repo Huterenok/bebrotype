@@ -6,13 +6,13 @@ import { SocLink } from "shared/ui/SocLink";
 import { NavbarLink } from "./NavbarLink";
 
 import { navLinks, socLinks } from "../config/links";
-import styles from "./Navbar.module.css";
+import styles from "./Navbar.module.scss";
 
 export const Navbar: FC = () => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
-        <Link href={"/"} className={styles.logo}>
+        <Link href={"/"}>
           <Image
             alt={"Logo"}
             src={"/icons/banana.svg"}

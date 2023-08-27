@@ -2,7 +2,7 @@ import { Metadata } from "next";
 
 import { ProfileInfo } from "widgets";
 
-import styles from "app-flat/styles/page-styles/Profile.module.css";
+import styles from "app-flat/styles/page-styles/Profile.module.scss";
 
 export const metadata: Metadata = {
   title: "Profile",

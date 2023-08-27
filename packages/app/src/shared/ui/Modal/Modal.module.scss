@@ -17,10 +17,12 @@
     opacity: 1;
     pointer-events: auto;
   }
+
+	.content {
+		padding: 16px;
+		background-color: var(--sage);
+		border-radius: var(--radius-m);
+	}
 }
 
-.content {
-  padding: 16px;
-  background-color: var(--sage);
-  border-radius: var(--radius-m);
-}
+

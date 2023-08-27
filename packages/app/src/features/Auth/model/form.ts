@@ -1,17 +1,29 @@
-import { createEffect, createEvent, createStore, sample } from "effector";
-import { Form, createForm } from "effector-forms";
+import {
+  combine,
+  createEffect,
+  createEvent,
+  createStore,
+  sample,
+} from "effector";
+import { ValidationError, createForm } from "effector-forms";
+
 import { loginFx, registerFx } from "./auth";
 
-export enum FormType {
+import { toast } from "react-toastify";
+import { trimObject } from "shared/lib";
+
+export enum FormCondition {
   LOGIN = "Login",
   REGISTRATION = "Registration",
 }
 
 export const toggleFormCond = createEvent();
-export const $formCond = createStore<FormType>(FormType.LOGIN).on(
+export const $formCond = createStore<FormCondition>(FormCondition.LOGIN).on(
   toggleFormCond,
   (state) => {
-    return state == FormType.LOGIN ? FormType.REGISTRATION : FormType.LOGIN;
+    return state == FormCondition.LOGIN
+      ? FormCondition.REGISTRATION
+      : FormCondition.LOGIN;
   }
 );
 
@@ -20,6 +32,7 @@ interface AuthForm {
   password: string;
   username: string;
 }
+
 //TODO: Validation
 export const authForm = createForm({
   fields: {
@@ -29,7 +42,7 @@ export const authForm = createForm({
         {
           name: "email",
           validator: (value: string) => /\S+@\S+\.\S+/.test(value),
-          errorText: "Email is required",
+          errorText: "Email must be valid",
         },
       ],
     },
@@ -39,7 +52,7 @@ export const authForm = createForm({
         {
           name: "required",
           validator: (value: string) => Boolean(value),
-          errorText: "Password is required",
+          errorText: "Password must consist of 6 to 24 characters",
         },
       ],
     },
@@ -50,12 +63,12 @@ export const authForm = createForm({
           name: "username",
           validator: (value: string) => {
             //TODO: getState - bad practice
-            if ($formCond.getState() == FormType.LOGIN) {
+            if ($formCond.getState() == FormCondition.LOGIN) {
               return true;
             }
             return Boolean(value);
           },
-          errorText: "Username is required",
+          errorText: "Username must consist of 6 to 24 characters",
         },
       ],
     },
@@ -63,16 +76,45 @@ export const authForm = createForm({
   validateOn: ["submit"],
 });
 
-export const formFx = createEffect((params: AuthForm) => {
-  //TODO
-  if ($formCond.getState() == FormType.LOGIN) {
-    loginFx({ email: params.email, password: params.password });
-  } else {
-    registerFx(params);
-  }
+type Errors = [...(ValidationError<string> | null)[]];
+
+const displayErrorsFx = createEffect((errors: Errors) => {
+  errors.map((err) => {
+    if (err) {
+      toast.error(err.errorText);
+    }
+  });
 });
 
 sample({
+  clock: authForm.submit,
+  source: [
+    authForm.fields.email.$firstError,
+    authForm.fields.username.$firstError,
+    authForm.fields.password.$firstError,
+  ],
+  target: displayErrorsFx,
+});
+
+const formValidatedFx = createEffect(
+  async (arr: (AuthForm | FormCondition)[]) => {
+    const formCond = arr[0];
+    //TODO: type this
+    const formData = trimObject(arr[1]) as AuthForm;
+    if (formCond == FormCondition.LOGIN) {
+      loginFx({
+        email: formData.email,
+        password: formData.password,
+      });
+    } else {
+      console.log(formData);
+      registerFx(formData);
+    }
+  }
+);
+
+sample({
   clock: authForm.formValidated,
-  target: formFx,
+  source: [$formCond, authForm.$values],
+  target: formValidatedFx,
 });

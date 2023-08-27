@@ -1,5 +1,5 @@
 use std::net::SocketAddr;
-
+use dotenvy::var;
 use tokio::sync::OnceCell;
 
 pub struct Env {
@@ -15,10 +15,9 @@ pub fn load_env() -> Env {
         .expect("Env variable PORT was not provided")
         .parse::<SocketAddr>()
         .unwrap();
-    let database_url =
-        std::env::var("DATABASE_URL").expect("Env variable DATABASE_URL was not provided");
+    let database_url = var("DATABASE_URL").expect("Env variable DATABASE_URL was not provided");
     let secret_jwt_key =
-        std::env::var("SECRET_JWT_KEY").expect("Env variable SECRET_JWT_KEY was not provided");
+        var("SECRET_JWT_KEY").expect("Env variable SECRET_JWT_KEY was not provided");
 
     Env {
         database_url,

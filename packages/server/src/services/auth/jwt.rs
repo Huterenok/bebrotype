@@ -8,8 +8,11 @@ use serde::{Deserialize, Serialize};
 use chrono::{Duration, Utc};
 use jsonwebtoken::{decode, encode, Header};
 
-use crate::config::{Error, Result, CR};
-use crate::entities::User;
+use crate::{
+    common::{Error, Result},
+    config::CR,
+    entities::User,
+};
 
 use super::get_user_by_email;
 
@@ -52,24 +55,25 @@ pub async fn generate_token(claims: &User) -> Result<String> {
     match encode(&Header::default(), &claims, &CR().await.jwt.encoding_key) {
         Ok(token) => Ok(token),
         Err(_) => {
-						//TODO
-						tracing::error!("Error while encoding token");
+            tracing::error!("Error while encoding token");
             Err(Error::InternalServerError.into_response())
         }
     }
 }
 
 pub async fn validate_token(token: &str) -> Result<String> {
-    decode::<Claims>(token, &CR().await.jwt.decoding_key, &CR().await.jwt.validation)
-        .map_err(|error| match error.kind() {
-            jsonwebtoken::errors::ErrorKind::InvalidToken
-            | jsonwebtoken::errors::ErrorKind::InvalidSignature
-            | jsonwebtoken::errors::ErrorKind::ExpiredSignature => {
-                Error::NotAuthorized.into_response()
-            }
-            _ => Error::NotAuthorized.into_response(),
-        })
-        .map(|data| data.claims.email)
+    decode::<Claims>(
+        token,
+        &CR().await.jwt.decoding_key,
+        &CR().await.jwt.validation,
+    )
+    .map_err(|error| match error.kind() {
+        jsonwebtoken::errors::ErrorKind::InvalidToken
+        | jsonwebtoken::errors::ErrorKind::InvalidSignature
+        | jsonwebtoken::errors::ErrorKind::ExpiredSignature => Error::NotAuthorized.into_response(),
+        _ => Error::NotAuthorized.into_response(),
+    })
+    .map(|data| data.claims.email)
 }
 
 pub fn extract_token(headers: HeaderMap) -> Result<String> {

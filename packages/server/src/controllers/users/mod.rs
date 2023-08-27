@@ -2,17 +2,15 @@ pub mod dto;
 
 use axum::extract::{Multipart, Path, Query};
 use axum::routing::{get, patch};
-use axum::{Extension, Json, Router, debug_handler};
+use axum::{Extension, Json, Router};
 
-use crate::entities::User;
+use crate::{
+    common::Result,
+    entities::User,
+    services::users::{get_all_users, get_user_by_id, update_user},
+};
 
-use dto::UserResponseDto;
-
-use crate::services::users::{get_all_users, get_user_by_id, update_user};
-
-use crate::config::Result;
-
-use self::dto::AllUsersQuery;
+use self::dto::{AllUsersQuery, UserResponseDto};
 
 pub fn create_public_user_routes() -> Router {
     let router = Router::new()

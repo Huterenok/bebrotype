@@ -1,3 +1,3 @@
-export { loginFx, registerFx } from "./auth";
-export { modalToggle, $isModalOpened } from "./modal";
-export { authForm, formFx, FormType, $formCond, toggleFormCond } from "./form";
+export { loginFx, registerFx, googleOAuthFx} from "./auth";
+export { modalToggleFn, $isModalOpened } from "./modal";
+export { authForm, FormCondition, $formCond, toggleFormCond } from "./form";

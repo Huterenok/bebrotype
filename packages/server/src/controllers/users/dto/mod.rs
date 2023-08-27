@@ -40,6 +40,7 @@ pub struct CreateUserDto {
         message = "Password must consist of 6 to 24 characters"
     ))]
     pub password: String,
+		pub avatar: Option<String>
 }
 
 #[derive(Deserialize)]

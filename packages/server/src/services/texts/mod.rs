@@ -1,14 +1,15 @@
 use axum::response::IntoResponse;
 
-use crate::entities::{Text, User};
+use crate::{
+	entities::{Text, User},
 
-use crate::config::{Error, Result};
+	controllers::texts::dto::{CreateTextDto, UpdateTextDto},
+	repositories::texts::{create, delete, get_by_id, get_by_user, get_liked, update, like, dislike},
 
-use crate::controllers::texts::dto::{CreateTextDto, UpdateTextDto};
+	common::{Error, Result}
+};
 
 use super::users::get_user_by_id;
-
-use crate::repositories::texts::{create, delete, get_by_id, get_by_user, get_liked, update, like, dislike};
 
 pub async fn create_text(user_id: i64, dto: CreateTextDto) -> Result<Text> {
     let text = dto.into_text(user_id);

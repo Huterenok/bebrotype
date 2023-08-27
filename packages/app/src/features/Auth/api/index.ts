@@ -1,5 +1,6 @@
+import { ILoginRequest, IRegisterRequest, IUserResponse } from "../types";
+
 import { request } from "shared/api";
-import { ILoginRequest, IRegisterRequest, IUserResponse } from "./dto";
 
 export const register = async (
   registerRequest: IRegisterRequest
@@ -21,4 +22,9 @@ export const login = async (
   });
 };
 
-export type { ILoginRequest, IRegisterRequest, IUserResponse } from "./dto";
+//TODO: todoooooo
+export const googleOAuth = async () => {
+  location.replace(
+    "http://localhost:3001/api/auth/google-oauth?return_url=http://localhost:3000"
+  );
+};

@@ -1,16 +1,17 @@
 pub mod dto;
 
 use axum::extract::Path;
-use axum::routing::{get, patch, post, delete};
+use axum::routing::{delete, get, patch, post};
 use axum::{Extension, Json, Router};
 
-use crate::entities::{Text, User};
-
-use crate::config::{Result, ValidatedJson};
+use crate::{
+    common::{Result, ValidatedJson},
+    entities::{Text, User},
+};
 
 use crate::services::texts::{
-    create_text, get_text_by_id, get_texts_by_user_id,
-    update_text, delete_text, toggle_like, get_liked_texts
+    create_text, delete_text, get_liked_texts, get_text_by_id, get_texts_by_user_id, toggle_like,
+    update_text,
 };
 
 use self::dto::{CreateTextDto, UpdateTextDto};
@@ -28,7 +29,7 @@ pub fn create_private_text_routes() -> Router {
         .route("/edit/:id", patch(update_text_route))
         .route("/favourite", get(get_liked_texts_route))
         .route("/favourite/:id", patch(toggle_like_route))
-				.route("/delete/:id", delete(delete_text_route));
+        .route("/delete/:id", delete(delete_text_route));
     Router::new().nest("/text", router)
 }
 
@@ -58,7 +59,7 @@ async fn get_liked_texts_route(Extension(user): Extension<User>) -> Result<Json<
 async fn update_text_route(
     Path(id): Path<i64>,
     Extension(user): Extension<User>,
-		ValidatedJson(dto): ValidatedJson<UpdateTextDto>,
+    ValidatedJson(dto): ValidatedJson<UpdateTextDto>,
 ) -> Result<Json<Text>> {
     let res = update_text(id, user.id, dto).await?;
     Ok(Json(res))
@@ -73,9 +74,9 @@ async fn toggle_like_route(
 }
 
 async fn delete_text_route(
-		Path(id): Path<i64>,
+    Path(id): Path<i64>,
     Extension(user): Extension<User>,
 ) -> Result<Json<Text>> {
-		let res = delete_text(id, user.id).await?;
-		Ok(Json(res))
+    let res = delete_text(id, user.id).await?;
+    Ok(Json(res))
 }

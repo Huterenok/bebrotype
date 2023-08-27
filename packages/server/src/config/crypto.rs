@@ -5,7 +5,7 @@ use bcrypt::{hash, verify};
 use jsonwebtoken::{Algorithm, DecodingKey, EncodingKey, Validation};
 
 use super::env::ENV;
-use super::error::{Error, Result};
+use crate::common::{Error, Result};
 
 pub struct Jwt {
     pub decoding_key: DecodingKey,

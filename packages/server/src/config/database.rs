@@ -7,7 +7,7 @@ use diesel_async::AsyncPgConnection;
 use tokio::sync::OnceCell;
 
 use super::env::ENV;
-use super::error::{Error, Result};
+use crate::common::{Error, Result};
 
 pub struct Connector {
     pub pool: Pool<AsyncPgConnection>,

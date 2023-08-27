@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { INavLink } from "../../types";
 
-import styles from "./NavbarLink.module.css";
+import styles from "./NavbarLink.module.scss";
 
 export const NavbarLink: FC<INavLink> = ({ img, subtitle, to }) => {
   return (

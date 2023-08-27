@@ -4,14 +4,16 @@ use diesel::prelude::*;
 use diesel_async::RunQueryDsl;
 
 use crate::entities::schema::users::{
-    avatar as avatar_column, dsl::users as users_table, email as email_column,
-     id as id_column,
+    avatar as avatar_column, dsl::users as users_table, email as email_column, id as id_column,
     near_address as near_address_column, password as password_column, username as username_column,
 };
-use crate::entities::User;
 
-use crate::config::{Error, Result, DB};
-use crate::controllers::users::dto::{CreateUserDto, UpdateUserDto};
+use crate::{
+    common::{Error, Result},
+    config::DB,
+    controllers::users::dto::{CreateUserDto, UpdateUserDto},
+    entities::User,
+};
 
 pub async fn create(dto: CreateUserDto) -> Result<User> {
     let mut conn = DB().await.get_conn().await?;
@@ -21,6 +23,7 @@ pub async fn create(dto: CreateUserDto) -> Result<User> {
             username_column.eq(dto.username),
             email_column.eq(dto.email),
             password_column.eq(dto.password),
+            avatar_column.eq(dto.avatar),
         ))
         .returning(User::as_returning())
         .get_result(&mut conn)

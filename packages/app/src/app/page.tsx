@@ -1,10 +1,10 @@
 import Link from "next/link";
-
-import { Title, Button, Text } from "shared/ui";
-import { RunningBanana } from "widgets";
-
-import styles from "app-flat/styles/page-styles/Home.module.css";
 import { Metadata } from "next";
+
+import { RunningBanana } from "widgets";
+import { Title, Button, Text } from "shared/ui";
+
+import styles from "app-flat/styles/page-styles/Home.module.scss";
 
 export const metadata: Metadata = {
   title: "Bebrotype",
@@ -31,9 +31,7 @@ export default function Home() {
         are distributed now).
       </Text>
       <Button className={styles.btn}>
-        <Link href={"/typing"} className={styles.link}>
-          Let{"'"}s Start now!
-        </Link>
+        <Link href={"/typing"}>Let{"'"}s Start now!</Link>
       </Button>
       <div className={styles.model_wrapper}>
         <RunningBanana />

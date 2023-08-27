@@ -8,6 +8,15 @@ diesel::table! {
 }
 
 diesel::table! {
+    oauth_google_storage (id) {
+        id -> Int8,
+        csrf_state -> Text,
+        pkce_code_verifier -> Text,
+        return_url -> Text,
+    }
+}
+
+diesel::table! {
     texts (id) {
         id -> Int8,
         title -> Text,
@@ -34,6 +43,7 @@ diesel::joinable!(texts -> users (user_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     liked_texts,
+    oauth_google_storage,
     texts,
     users,
 );

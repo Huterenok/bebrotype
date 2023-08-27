@@ -48,5 +48,10 @@ pub enum Error {
     NotAuthorized,
 		#[error(code = 403, msg = "You are not allowed to do this")]
     NotAllowed,
+
+		#[error(code = 400, msg = "OAuth wrong credentials")]
+		OAuthWrongCredentials,
+		#[error(code = 400, msg = "Your email is not verified")]
+		OAuthEmailNotVerified
 }
 

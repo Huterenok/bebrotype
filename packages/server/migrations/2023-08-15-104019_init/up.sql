@@ -1,5 +1,4 @@
 -- Your SQL goes here
--- Your SQL goes here
 CREATE TABLE users (
 	id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   username TEXT UNIQUE NOT NULL,

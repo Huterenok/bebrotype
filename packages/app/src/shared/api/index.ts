@@ -53,6 +53,7 @@ export async function requestFD<R>(params: IRequest): Promise<R> {
     method,
     body: JSON.stringify(body),
     headers: defaultFDHeaders,
+    redirect: "follow",
   });
 
   if (!response.ok) {

@@ -1,13 +1,18 @@
 pub mod jwt;
+pub mod oauth;
 
 use axum::response::IntoResponse;
 
-use crate::config::{Error, Result, Coder};
-
-use crate::controllers::auth::dto::{AuthPayload, LoginDto};
-use crate::controllers::users::dto::CreateUserDto;
+use crate::{
+    common::{Error, Result},
+    config::Coder,
+		
+    controllers::auth::dto::{AuthPayload, LoginDto},
+    controllers::users::dto::CreateUserDto,
+};
 
 use self::jwt::generate_token;
+
 use super::users::{create_user, get_user_by_email};
 
 pub async fn register(register_request: CreateUserDto) -> Result<AuthPayload> {

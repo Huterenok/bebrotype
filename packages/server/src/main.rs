@@ -4,6 +4,7 @@ mod repositories;
 mod services;
 mod config;
 mod utils;
+mod common;
 
 use config::env::ENV;
 

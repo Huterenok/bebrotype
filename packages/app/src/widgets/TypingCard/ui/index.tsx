@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Card } from "shared/ui/Card";
 
 import { ITypingCard } from "../types";
-import styles from "./TypingCard.module.css";
+import styles from "./TypingCard.module.scss";
 
 export const TypingCard: FC<ITypingCard> = ({
   icon,

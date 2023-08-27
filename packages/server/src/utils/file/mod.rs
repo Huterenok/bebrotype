@@ -1,6 +1,6 @@
 use axum::response::IntoResponse;
 
-use crate::config::error::{Error, Result};
+use crate::common::{Error, Result};
 
 const FORMATS: [&str; 3] = ["png", "jpeg", "jpg"];
 

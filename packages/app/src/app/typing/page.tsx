@@ -1,10 +1,10 @@
 import { Metadata } from "next";
 
+import { ITypingCard, TypingCard } from "widgets";
 import { Title } from "shared/ui";
 
-import styles from "app-flat/styles/page-styles/Typing.module.css";
-import { ITypingCard } from "widgets/TypingCard/types";
-import { TypingCard } from "widgets/TypingCard/ui";
+import styles from "app-flat/styles/page-styles/Typing.module.scss";
+
 
 export const metadata: Metadata = {
   title: "Typing",

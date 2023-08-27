@@ -1,6 +1,6 @@
+import { ICreateTextRequest, IUpdateTextRequest, IText} from "../types";
+
 import { request } from "shared/api";
-import { IText } from "../types";
-import { ICreateTextRequest, IUpdateTextRequest } from "./dto";
 
 export const getTextsByUserId = async (id: number): Promise<IText[]> => {
   return await request<IText[]>({
@@ -54,4 +54,3 @@ export const deleteFavourite = async (id: number): Promise<IText> => {
   });
 };
 
-export type { ICreateTextRequest, IUpdateTextRequest } from "./dto";

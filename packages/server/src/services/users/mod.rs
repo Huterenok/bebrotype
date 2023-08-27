@@ -4,16 +4,16 @@ use tokio::io::AsyncWriteExt;
 
 use axum::extract::Multipart;
 
-use crate::config::{Error, Result, Coder};
-use crate::entities::User;
+use crate::{
+    entities::User,
 
-use crate::controllers::users::dto::{
-    AllUsersQuery, CreateUserDto, UpdateUserDto,
+		controllers::users::dto::{AllUsersQuery, CreateUserDto, UpdateUserDto},
+		repositories::users::{create, get_all, get_by_email, get_by_id, update},
+
+		common::{Error, Result},
+    config::Coder,
+		utils::validate_image_file_format
 };
-
-use crate::repositories::users::{create, get_all, get_by_email, get_by_id, update};
-
-use crate::utils::validate_image_file_format;
 
 pub async fn create_user(mut dto: CreateUserDto) -> Result<User> {
     dto.password = Coder::encrypt(&dto.password)?;
