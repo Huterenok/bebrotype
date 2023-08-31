@@ -1,13 +1,15 @@
 "use client";
 
-import { useAuth } from "enities/User";
+import { useAuth } from "features/Auth";
+
+import styles from "app-flat/styles/page-styles/Profile.module.scss";
 
 export default function ProfileLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const isAuth = useAuth();
+  const _ = useAuth();
 
-  return <section>{children}</section>;
+  return <section className={styles.layout}>{children}</section>;
 }

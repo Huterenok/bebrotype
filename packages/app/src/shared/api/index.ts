@@ -1,5 +1,5 @@
 import ky from "ky";
-import { getToken } from "shared/lib/token";
+import { getToken } from "shared/config/token";
 
 export const API_URL = process.env.API_URL;
 
@@ -46,7 +46,7 @@ export async function requestFD<R>(params: IRequest): Promise<R> {
 
   const token = getToken();
   if (token) {
-    defaultFDHeaders.set("Authorization", token);
+    defaultHeaders.set("Authorization", token);
   }
 
   const response = await connector(endpoint, {

@@ -1,15 +1,26 @@
 "use client";
-import { ReactNode, useEffect } from "react";
+
+import { useSearchParams, useRouter } from "next/navigation";
+import { ReactNode, useLayoutEffect } from "react";
 import { useUnit } from "effector-react";
 
-import { useOAuth } from "features/Auth";
 import { whoamiFn } from "enities/User";
+
+import { setToken } from "shared/config/token";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const whoami = useUnit(whoamiFn);
-  const _ = useOAuth();
+  const params = useSearchParams();
+  const router = useRouter();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    const token = params.get("token");
+
+    if (token) {
+      setToken(token);
+      router.replace("/");
+    }
+
     whoami();
   }, []);
 

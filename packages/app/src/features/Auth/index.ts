@@ -1,1 +1,1 @@
-export {useOAuth} from "./lib"
+export {useAuth} from "./lib/useAuth"

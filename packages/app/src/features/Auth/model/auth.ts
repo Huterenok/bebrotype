@@ -1,50 +1,67 @@
-import { createEffect } from "effector";
+import { createEvent, sample } from "effector";
+import { createMutation, createQuery } from "@farfetched/core";
 
 import { modalToggleFn } from "./modal";
+import { login, register, googleOAuth } from "../api";
+import { ILoginRequest, IRegisterRequest } from "../types";
 
 import { $user } from "enities/User";
 
-import {
-  login,
-  register,
-  IRegisterRequest,
-  ILoginRequest,
-  googleOAuth,
-} from "../api";
+import { toastErrorFn, toastSuccessFn } from "shared/config/toast";
+import { setToken } from "shared/config/token";
 
-import { toast } from "react-toastify";
-import { setToken } from "shared/lib";
-
-export const registerFx = createEffect(
-  async (registerRequest: IRegisterRequest) => {
+export const registerFn = createEvent<IRegisterRequest>();
+const registerFx = createMutation({
+  handler: async (registerRequest: IRegisterRequest) => {
     return await register(registerRequest);
-  }
-);
-export const loginFx = createEffect(async (loginRequest: ILoginRequest) => {
-  return await login(loginRequest);
+  },
 });
 
-export const googleOAuthFx = createEffect(async () => {
-  return await googleOAuth();
+export const loginFn = createEvent<ILoginRequest>();
+const loginFx = createMutation({
+  handler: async (loginRequest: ILoginRequest) => {
+    return await login(loginRequest);
+  },
 });
 
-$user.on(loginFx.doneData, (_, payload) => {
-  toast.success("Successfully logged in!");
-  setToken(payload.token);
+export const googleOAuthFn = createEvent();
+const googleOAuthFx = createQuery({
+  handler: async () => {
+    await googleOAuth();
+  },
+});
+
+sample({
+  clock: registerFn,
+  target: registerFx.start,
+});
+
+sample({
+  clock: loginFn,
+  target: loginFx.start,
+});
+
+sample({
+  clock: googleOAuthFn,
+  target: googleOAuthFx.start,
+});
+
+$user.on(registerFx.finished.success, (_, { result }) => {
+  toastSuccessFn("Successfully registered!");
+  setToken(result.token);
   modalToggleFn();
-  return payload.user;
+  return result.user;
 });
-$user.on(loginFx.failData, (_, payload) => {
-  toast.error(payload.message);
+$user.on(registerFx.finished.failure, (_, { error }) => {
+  toastErrorFn(error.message);
 });
 
-$user.on(registerFx.doneData, (_, payload) => {
-  toast.success("Successfully registered!");
-  setToken(payload.token);
+$user.on(loginFx.finished.success, (_, { result }) => {
+  toastSuccessFn("Successfully logged in!");
+  setToken(result.token);
   modalToggleFn();
-  return payload.user;
+  return result.user;
 });
-$user.on(registerFx.failData, (_, payload) => {
-  toast.error(payload.message);
+$user.on(loginFx.finished.failure, (_, { error }) => {
+  toastErrorFn(error.message);
 });
-

@@ -1,5 +1,6 @@
 import { FC, ReactNode } from "react";
 
+import classNames from "classnames";
 import styles from "./Card.module.scss";
 
 export enum CardSize {
@@ -10,8 +11,15 @@ export enum CardSize {
 interface CardProps {
   size?: CardSize;
   children: string | ReactNode;
+  className?: string;
 }
 
-export const Card: FC<CardProps> = ({ size = CardSize.M, children }) => {
-  return <div className={styles.wrapper}>{children}</div>;
+export const Card: FC<CardProps> = ({
+  size = CardSize.M,
+  children,
+  className,
+}) => {
+  return (
+    <div className={classNames(styles.wrapper, className)}>{children}</div>
+  );
 };

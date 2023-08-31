@@ -25,6 +25,7 @@ export const login = async (
 //TODO: todoooooo
 export const googleOAuth = async () => {
   location.replace(
+    //TODO: return url
     "http://localhost:3001/api/auth/google-oauth?return_url=http://localhost:3000"
   );
 };

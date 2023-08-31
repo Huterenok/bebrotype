@@ -1,2 +1,1 @@
-export {getToken, setToken} from "./token"
-export {trimObject} from "./trimObject"
+export { trimObject } from "./trimObject";

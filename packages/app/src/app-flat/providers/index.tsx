@@ -1,8 +1,8 @@
-import { EffectorNext } from "@effector/next";
 import { FC } from "react";
 
-import { ToastContainer } from "react-toastify";
+import { EffectorNext } from "@effector/next";
 import { AuthProvider } from "./AuthProvider";
+import { ToastContainer } from "react-toastify";
 
 interface ProvidersProps {
   children: React.ReactNode;

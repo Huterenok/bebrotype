@@ -1,0 +1,37 @@
+.wrapper {
+  padding: 48px;
+
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 128px;
+
+  .image {
+    width: 256px;
+    height: 256px;
+
+    border-radius: 50%;
+
+    transition: all 0.2s var(--transition);
+
+    &:hover {
+      border: 8px solid var(--sage);
+    }
+  }
+
+  .fileInput {
+    display: none;
+  }
+
+  .card {
+    width: 420px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    line-height: 42px;
+  }
+}

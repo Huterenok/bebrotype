@@ -9,8 +9,11 @@ interface PortalProps {
 }
 
 // TODO: document.body must be only on client
-export const Portal: FC<PortalProps> = ({ children }) => {
-  return createPortal(children, document.body);
+export const Portal: FC<PortalProps> = ({
+  children,
+  element = document.body,
+}) => {
+  return createPortal(children, element);
 };
 
 // export const Portal: FC<PortalProps> = ({ children }) => {

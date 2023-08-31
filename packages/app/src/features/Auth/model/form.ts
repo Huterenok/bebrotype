@@ -7,7 +7,7 @@ import {
 } from "effector";
 import { ValidationError, createForm } from "effector-forms";
 
-import { loginFx, registerFx } from "./auth";
+import { loginFn, registerFn } from "./auth";
 
 import { toast } from "react-toastify";
 import { trimObject } from "shared/lib";
@@ -102,13 +102,13 @@ const formValidatedFx = createEffect(
     //TODO: type this
     const formData = trimObject(arr[1]) as AuthForm;
     if (formCond == FormCondition.LOGIN) {
-      loginFx({
+      loginFn({
         email: formData.email,
         password: formData.password,
       });
     } else {
       console.log(formData);
-      registerFx(formData);
+      registerFn(formData);
     }
   }
 );

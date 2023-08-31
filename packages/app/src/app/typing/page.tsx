@@ -5,7 +5,6 @@ import { Title } from "shared/ui";
 
 import styles from "app-flat/styles/page-styles/Typing.module.scss";
 
-
 export const metadata: Metadata = {
   title: "Typing",
 };

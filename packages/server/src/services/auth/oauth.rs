@@ -138,7 +138,7 @@ struct RetrievedData {
 fn retrieve_data_from_access_token(body: String) -> Result<RetrievedData> {
     let body: Value = serde_json::from_str(body.as_str()).unwrap();
     let email = match body.get("email") {
-        Some(data) => data.to_string(),
+        Some(data) => data.as_str().unwrap().to_owned(),
         None => return Err(Error::OAuthWrongCredentials.into_response()),
     };
     match body.get("verified_email") {
@@ -149,11 +149,11 @@ fn retrieve_data_from_access_token(body: String) -> Result<RetrievedData> {
         None => return Err(Error::OAuthWrongCredentials.into_response()),
     };
     let username = match body.get("name") {
-        Some(data) => data.to_string(),
+        Some(data) => data.as_str().unwrap().to_owned(),
         None => return Err(Error::OAuthWrongCredentials.into_response()),
     };
     let avatar = match body.get("picture") {
-        Some(data) => Some(data.to_string()),
+        Some(data) => Some(data.as_str().unwrap().to_owned()),
         None => None,
     };
 

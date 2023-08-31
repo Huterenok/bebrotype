@@ -8,7 +8,7 @@ import {
   $formCond,
   FormCondition,
   toggleFormCond,
-  googleOAuthFx,
+  googleOAuthFn,
 } from "../../../model";
 
 import { Button, Input } from "shared/ui";
@@ -18,7 +18,7 @@ import styles from "./AuthForm.module.scss";
 export const AuthForm: FC = () => {
   const { fields, submit } = useForm(authForm);
   const [formCond, toggleFormCondFn] = useUnit([$formCond, toggleFormCond]);
-  const googleOAuth = useUnit(googleOAuthFx);
+  const googleOAuth = useUnit(googleOAuthFn);
 
   const onSubmit = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -58,7 +58,7 @@ export const AuthForm: FC = () => {
         <Button onClick={onSubmit}>{"Let's start"}</Button>
         <h1>or</h1>
         <Image
-          onClick={googleOAuth}
+          onClick={() => googleOAuth()}
           width={48}
           height={48}
           src={"/icons/google.svg"}

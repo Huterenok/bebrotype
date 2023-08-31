@@ -10,7 +10,7 @@ import styles from "./Navbar.module.scss";
 
 export const Navbar: FC = () => {
   return (
-    <div className={styles.wrapper}>
+    <nav className={styles.wrapper}>
       <div className={styles.container}>
         <Link href={"/"}>
           <Image
@@ -32,6 +32,6 @@ export const Navbar: FC = () => {
           ))}
         </div>
       </div>
-    </div>
+    </nav>
   );
 };
