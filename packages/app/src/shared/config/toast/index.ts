@@ -6,10 +6,14 @@ const $toast = createStore(toast);
 
 export const toastErrorFn = createEvent<string | ReactNode>();
 export const toastSuccessFn = createEvent<string | ReactNode>();
+export const toastWarnFn = createEvent<string | ReactNode>();
 
 $toast.on(toastErrorFn, (state, payload) => {
   state.error(payload);
 });
 $toast.on(toastSuccessFn, (state, payload) => {
   state.success(payload);
+});
+$toast.on(toastWarnFn, (state, payload) => {
+  state.warn(payload);
 });

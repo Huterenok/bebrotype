@@ -8,7 +8,7 @@ export const getTextsByUserId = async (id: number): Promise<IText[]> => {
   });
 };
 
-export const getTextsById = async (id: number): Promise<IText> => {
+export const getTextById = async (id: number): Promise<IText> => {
   return await request<IText>({
     endpoint: `text/${id}`,
   });

@@ -1,12 +1,8 @@
-import { FC } from "react";
+import { FC, InputHTMLAttributes } from "react";
 
 import styles from "./Input.module.scss";
 
-interface InputProps {
-  value: number | string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholder: string;
-  type?: React.HTMLInputTypeAttribute;
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
 }
 
@@ -15,25 +11,32 @@ export const Input: FC<InputProps> = ({
   value,
   placeholder,
   label,
+  name,
   type = "text",
 }) => {
   return label ? (
-    <label>
-      {label}
+    <div>
+      <label htmlFor={name} className={styles.label}>
+        {label}
+      </label>
       <input
         type={type}
         onChange={onChange}
         value={value}
+        name={name}
         placeholder={placeholder}
         className={styles.input}
+        //TODO
+        id={name}
       />
-    </label>
+    </div>
   ) : (
     <input
       type={type}
       onChange={onChange}
-      placeholder={placeholder}
       value={value}
+      name={name}
+      placeholder={placeholder}
       className={styles.input}
     />
   );

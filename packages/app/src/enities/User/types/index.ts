@@ -5,3 +5,8 @@ export interface IUser {
   avatar?: string;
   near_address?: string;
 }
+
+export interface IUpdateUser {
+  email: string;
+  username: string;
+}

@@ -4,9 +4,10 @@
   width: 100%;
 
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 128px;
+  gap: 64px;
 
   .image {
     width: 256px;
@@ -21,17 +22,12 @@
     }
   }
 
-  .fileInput {
-    display: none;
-  }
-
-  .card {
-    width: 420px;
+  .fields {
+    max-width: 600px;
+    width: 100%;
 
     display: flex;
     flex-direction: column;
-    justify-content: center;
-
-    line-height: 42px;
+    gap: 24px;
   }
 }

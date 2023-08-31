@@ -4,16 +4,27 @@ import { FC } from "react";
 import Image from "next/image";
 import { useUnit } from "effector-react";
 
-import { $user } from "../../model";
+import { $user, updateUserFn } from "../../model";
 
-import { Card } from "shared/ui";
+import { Input } from "shared/ui";
 
 import styles from "./Profile.module.scss";
 
 //TODO: change name
 export const Profile: FC = () => {
-  const user = useUnit($user);
-  return (
+  const [user, updateUser] = useUnit([$user, updateUserFn])!;
+
+  const onChangeUserData = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //TODO
+    if (user) {
+      updateUser({
+        ...user!,
+        [e.target.name]: e.target.value,
+      });
+    }
+  };
+
+  return user ? (
     <div className={styles.wrapper}>
       <Image
         width={256}
@@ -22,11 +33,27 @@ export const Profile: FC = () => {
         alt="Profile"
         className={styles.image}
       />
-      <Card className={styles.card}>
-        <div>ID: {user?.id}</div>
-        <div>Username: {user?.username}</div>
-        <div>Email: {user?.email}</div>
-      </Card>
+      <div className={styles.fields}>
+        <Input
+          onChange={onChangeUserData}
+          value={user.username}
+          label="Username"
+          name="username"
+          placeholder="Your username"
+        />
+        <Input
+          onChange={onChangeUserData}
+          value={user.email}
+          label="Email"
+          name="email"
+          placeholder="Your email"
+        />
+        {/* TODO */}
+        {user.near_address ?? "You don't have any registered NEAR address"}
+      </div>
     </div>
-  );
+  ) : null;
+  {
+    /* TODO */
+  }
 };
