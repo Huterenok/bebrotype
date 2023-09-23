@@ -1,43 +1,32 @@
-import { ButtonHTMLAttributes, FC, ReactNode } from "react";
+import { ButtonHTMLAttributes, FC } from "react";
 import styles from "./Button.module.scss";
 import classNames from "classnames";
-
-export enum ButtonSize {
-  M,
-  L,
-}
 
 export enum ButtonColor {
   COMMON = "common",
   PRIME = "prime",
 }
 
-interface ButtonProps {
-  children: string | ReactNode;
-  onClick?: (e: React.MouseEvent) => void;
-  size?: ButtonSize;
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   color?: ButtonColor;
-  className?: string;
-  type?: ButtonHTMLAttributes<HTMLButtonElement>["type"];
 }
 
 export const Button: FC<ButtonProps> = ({
   children,
-  onClick,
   className,
-  size = ButtonSize.M,
   color = ButtonColor.COMMON,
   type = "button",
+  ...otherProps
 }) => {
   return (
     <button
       type={type}
-      onClick={onClick}
       className={classNames(
         styles.wrapper,
         { [styles[color]]: true },
         className
       )}
+      {...otherProps}
     >
       {children}
     </button>

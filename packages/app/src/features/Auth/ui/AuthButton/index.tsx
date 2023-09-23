@@ -5,14 +5,14 @@ import Image from "next/image";
 import { useUnit } from "effector-react";
 import { FC } from "react";
 
-import { modalToggleFn } from "../../model";
+import { modalToggleEv } from "../../model";
 
 import { $user } from "enities/User";
 import { Button, ButtonColor } from "shared/ui";
 
 export const AuthButton: FC = () => {
   const user = useUnit($user);
-  const modalToggle = useUnit(modalToggleFn);
+  const modalToggle = useUnit(modalToggleEv);
 
   const onAuthClick = () => {
     modalToggle();

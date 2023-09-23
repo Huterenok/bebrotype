@@ -1,8 +1,5 @@
 .wrapper {
-  padding: 24px;
-
-  width: 364px;
-  height: 212px;
+  padding: 16px;
 
   background-color: var(--sage);
 
@@ -11,9 +8,8 @@
 
   transition: 0.3s all var(--transition);
 
-	&:hover {
-		background-color: var(--green);
-		color: var(--sage);
-	}
+  &:hover {
+    background-color: var(--green);
+    color: var(--sage);
+  }
 }
-

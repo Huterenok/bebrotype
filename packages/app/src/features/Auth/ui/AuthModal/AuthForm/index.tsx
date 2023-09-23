@@ -7,8 +7,8 @@ import {
   authForm,
   $formCond,
   FormCondition,
-  toggleFormCond,
-  googleOAuthFn,
+  toggleFormCondEv,
+  googleOAuthEv,
 } from "../../../model";
 
 import { Button, Input } from "shared/ui";
@@ -17,8 +17,8 @@ import styles from "./AuthForm.module.scss";
 
 export const AuthForm: FC = () => {
   const { fields, submit } = useForm(authForm);
-  const [formCond, toggleFormCondFn] = useUnit([$formCond, toggleFormCond]);
-  const googleOAuth = useUnit(googleOAuthFn);
+  const [formCond, toggleFormCond] = useUnit([$formCond, toggleFormCondEv]);
+  const googleOAuth = useUnit(googleOAuthEv);
 
   const onSubmit = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -26,7 +26,7 @@ export const AuthForm: FC = () => {
   };
 
   const onChangeFormCond = () => {
-    toggleFormCondFn();
+    toggleFormCond();
   };
 
   return (

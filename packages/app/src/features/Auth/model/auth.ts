@@ -1,69 +1,89 @@
 import { createEvent, sample } from "effector";
-import { createMutation, createQuery } from "@farfetched/core";
+import {
+  createJsonMutation,
+  createQuery,
+  declareParams,
+} from "@farfetched/core";
+import { zodContract } from "@farfetched/zod";
 
-import { modalToggleFn } from "./modal";
+import { modalToggleEv } from "./modal";
 import { login, register, googleOAuth } from "../api";
-import { ILoginRequest, IRegisterRequest, IUserResponse } from "../types";
+import {
+  AuthResponseContract,
+  ILoginRequest,
+  IRegisterRequest,
+} from "../types";
 
-import { $user } from "enities/User";
+import { $user, setUserToken } from "enities/User";
+import { toastErrorEv, toastSuccessEv } from "shared/config";
 
-import { toastErrorFn, toastSuccessFn } from "shared/config/toast";
-import { setToken } from "shared/config/token";
-
-export const registerFn = createEvent<IRegisterRequest>();
-const registerFx = createMutation<IRegisterRequest, IUserResponse>({
-  handler: async (registerRequest) => {
-    return await register(registerRequest);
+export const registerEv = createEvent<IRegisterRequest>();
+const registerFx = createJsonMutation({
+  params: declareParams<IRegisterRequest>(),
+  request: {
+    method: "POST",
+    url: register,
+    body: (params) => {
+      return JSON.stringify(params);
+    },
+  },
+  response: {
+    contract: zodContract(AuthResponseContract),
   },
 });
 
-export const loginFn = createEvent<ILoginRequest>();
-const loginFx = createMutation<ILoginRequest, IUserResponse>({
-  handler: async (loginRequest: ILoginRequest) => {
-    return await login(loginRequest);
+export const loginEv = createEvent<ILoginRequest>();
+const loginFx = createJsonMutation({
+  params: declareParams<ILoginRequest>(),
+  request: {
+    method: "POST",
+    url: login
+  },
+  response: {
+    contract: zodContract(AuthResponseContract),
   },
 });
 
-export const googleOAuthFn = createEvent();
+export const googleOAuthEv = createEvent();
 const googleOAuthFx = createQuery({
   handler: async () => {
-    await googleOAuth();
+    googleOAuth();
   },
 });
 
 sample({
-  clock: registerFn,
+  clock: registerEv,
   target: registerFx.start,
 });
 
 sample({
-  clock: loginFn,
+  clock: loginEv,
   target: loginFx.start,
 });
 
 sample({
-  clock: googleOAuthFn,
+  clock: googleOAuthEv,
   target: googleOAuthFx.start,
 });
 
 $user.on(registerFx.finished.success, (_, { result }) => {
-  toastSuccessFn("Successfully registered!");
-  setToken(result.token);
-  modalToggleFn();
+  toastSuccessEv("Successfully registered!");
+  setUserToken(result.token);
+  modalToggleEv();
   return result.user;
 });
 $user.on(registerFx.finished.failure, (_, { error }) => {
   //@ts-ignore - TODO
-  toastErrorFn(error.message);
+  toastErrorEv(error.message);
 });
 
 $user.on(loginFx.finished.success, (_, { result }) => {
-  toastSuccessFn("Successfully logged in!");
-  setToken(result.token);
-  modalToggleFn();
+  toastSuccessEv("Successfully logged in!");
+  setUserToken(result.token);
+  modalToggleEv();
   return result.user;
 });
 $user.on(loginFx.finished.failure, (_, { error }) => {
   //@ts-ignore - TODO
-  toastErrorFn(error.message);
+  toastErrorEv(error.message);
 });

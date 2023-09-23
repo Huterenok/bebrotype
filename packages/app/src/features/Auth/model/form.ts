@@ -1,13 +1,7 @@
-import {
-  combine,
-  createEffect,
-  createEvent,
-  createStore,
-  sample,
-} from "effector";
+import { createEffect, createEvent, createStore, sample } from "effector";
 import { ValidationError, createForm } from "effector-forms";
 
-import { loginFn, registerFn } from "./auth";
+import { loginEv, registerEv } from "./auth";
 
 import { toast } from "react-toastify";
 import { trimObject } from "shared/lib";
@@ -17,9 +11,9 @@ export enum FormCondition {
   REGISTRATION = "Registration",
 }
 
-export const toggleFormCond = createEvent();
+export const toggleFormCondEv = createEvent();
 export const $formCond = createStore<FormCondition>(FormCondition.LOGIN).on(
-  toggleFormCond,
+  toggleFormCondEv,
   (state) => {
     return state == FormCondition.LOGIN
       ? FormCondition.REGISTRATION
@@ -97,24 +91,33 @@ sample({
 });
 
 const formValidatedFx = createEffect(
-  async (arr: (AuthForm | FormCondition)[]) => {
-    const formCond = arr[0];
-    //TODO: type this
-    const formData = trimObject(arr[1]) as AuthForm;
+  async ({
+    formData,
+    formCond,
+  }: {
+    formData: AuthForm;
+    formCond: FormCondition;
+  }) => {
+    const data = trimObject(formData);
     if (formCond == FormCondition.LOGIN) {
-      loginFn({
-        email: formData.email,
-        password: formData.password,
+      loginEv({
+        email: data.email,
+        password: data.password,
       });
     } else {
-      console.log(formData);
-      registerFn(formData);
+      registerEv(data);
     }
   }
 );
 
 sample({
   clock: authForm.formValidated,
-  source: [$formCond, authForm.$values],
+  source: $formCond,
+  fn: (formCond, formData) => {
+    return {
+      formData,
+      formCond,
+    };
+  },
   target: formValidatedFx,
 });

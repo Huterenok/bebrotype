@@ -4,16 +4,16 @@ import { toast } from "react-toastify";
 
 const $toast = createStore(toast);
 
-export const toastErrorFn = createEvent<string | ReactNode>();
-export const toastSuccessFn = createEvent<string | ReactNode>();
-export const toastWarnFn = createEvent<string | ReactNode>();
+export const toastErrorEv = createEvent<string | ReactNode>();
+export const toastSuccessEv = createEvent<string | ReactNode>();
+export const toastWarnEv = createEvent<string | ReactNode>();
 
-$toast.on(toastErrorFn, (state, payload) => {
+$toast.on(toastErrorEv, (state, payload) => {
   state.error(payload);
 });
-$toast.on(toastSuccessFn, (state, payload) => {
+$toast.on(toastSuccessEv, (state, payload) => {
   state.success(payload);
 });
-$toast.on(toastWarnFn, (state, payload) => {
+$toast.on(toastWarnEv, (state, payload) => {
   state.warn(payload);
 });

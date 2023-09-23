@@ -33,6 +33,8 @@ pub enum Error {
 		#[error(code = 400, msg = "User with this email or username already exists")]
     NearUserAlreadyExist,
 		
+		#[error(code = 404, msg = "No texts found")]
+		NoTextsFound,
 		#[error(code = 500, msg = "Couldn't create text")]
     TextCreationFail,
 		#[error(code = 404, msg = "Couldn't find text with {} id")]

@@ -62,7 +62,7 @@ body {
   overflow: hidden;
 }
 
-.layout {
+.global_layout {
   width: 100%;
   height: 100%;
 
@@ -76,14 +76,6 @@ body {
   height: 100%;
 
   padding: 32px 24px;
-}
-
-.error_wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
 }
 
 ::selection {

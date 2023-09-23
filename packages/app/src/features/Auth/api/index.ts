@@ -1,31 +1,13 @@
-import { ILoginRequest, IRegisterRequest, IUserResponse } from "../types";
+import { createEndpointUrl } from "shared/api";
 
-import { request } from "shared/api";
+export const register = createEndpointUrl("auth/register");
 
-export const register = async (
-  registerRequest: IRegisterRequest
-): Promise<IUserResponse> => {
-  return await request<IUserResponse>({
-    endpoint: "auth/register",
-    body: registerRequest,
-    method: "POST",
-  });
-};
-
-export const login = async (
-  loginRequest: ILoginRequest
-): Promise<IUserResponse> => {
-  return await request<IUserResponse>({
-    endpoint: "auth/login",
-    body: loginRequest,
-    method: "POST",
-  });
-};
+export const login = createEndpointUrl("auth/login");
 
 //TODO: todoooooo
-export const googleOAuth = async () => {
+export const googleOAuth = () => {
   location.replace(
-    //TODO: return url
-    "http://localhost:3001/api/auth/google-oauth?return_url=http://localhost:3000"
+    //TODO: return_url
+    createEndpointUrl("auth/google-oauth?return_url=http://localhost:3000")
   );
 };

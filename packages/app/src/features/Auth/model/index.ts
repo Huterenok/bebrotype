@@ -1,3 +1,3 @@
-export { loginFn, registerFn, googleOAuthFn} from "./auth";
-export { modalToggleFn, $isModalOpened } from "./modal";
-export { authForm, FormCondition, $formCond, toggleFormCond } from "./form";
+export { loginEv, registerEv, googleOAuthEv} from "./auth";
+export { modalToggleEv, $isModalOpened } from "./modal";
+export { authForm, FormCondition, $formCond, toggleFormCondEv } from "./form";

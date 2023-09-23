@@ -2,8 +2,8 @@ import { createEvent, createStore } from "effector";
 
 export const $isModalOpened = createStore<boolean>(false);
 
-export const modalToggleFn = createEvent();
+export const modalToggleEv = createEvent();
 
-$isModalOpened.on(modalToggleFn, (isOpened) => {
+$isModalOpened.on(modalToggleEv, (isOpened) => {
   return !isOpened;
 });

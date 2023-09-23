@@ -4,25 +4,23 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { ReactNode, useLayoutEffect } from "react";
 import { useUnit } from "effector-react";
 
-import { whoamiFn } from "enities/User";
-
-import { setToken } from "shared/config/token";
+import { whoamiEv, setUserToken } from "enities/User";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const whoami = useUnit(whoamiFn);
+  const whoami = useUnit(whoamiEv);
   const params = useSearchParams();
   const router = useRouter();
 
   useLayoutEffect(() => {
-    const token = params.get("token");
+    const userToken = params.get("token");
 
-    if (token) {
-      setToken(token);
+    if (userToken) {
+      setUserToken(userToken);
       router.replace("/");
     }
 
     whoami();
-  }, []);
+  }, [params, router]);
 
   return <>{children}</>;
 };

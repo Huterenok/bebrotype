@@ -1,2 +1,2 @@
-export {TextCard} from "./TextCard"
-export {UsersTexts} from "./UsersTexts"
+export { TextItem } from "./TextList/TextItem";
+export { TextList } from "./TextList";

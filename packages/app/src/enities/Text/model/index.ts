@@ -1,1 +1,1 @@
-export { $userTexts, getUserTextsFn } from "./userTexts";
+export { createTextList } from "./list";

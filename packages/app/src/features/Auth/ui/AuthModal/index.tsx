@@ -3,14 +3,14 @@
 import { useUnit } from "effector-react";
 import { FC } from "react";
 
-import { $isModalOpened, modalToggleFn } from "../../model/modal";
+import { $isModalOpened, modalToggleEv } from "../../model/modal";
 import { AuthForm } from "./AuthForm";
 
 import { Modal } from "shared/ui";
 
 export const AuthModal: FC = () => {
   const isModalOpened = useUnit($isModalOpened);
-  const modalToggle = useUnit(modalToggleFn);
+  const modalToggle = useUnit(modalToggleEv);
 
   const onClose = () => {
     modalToggle();

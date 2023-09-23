@@ -28,7 +28,6 @@ pub async fn authentication_middleware<T>(
     next: Next<T>,
 ) -> Result<Response> {
     let header_token = extract_token(headers)?;
-
     let email = validate_token(&header_token).await?;
     let user = get_user_by_email(email).await;
 

@@ -1,12 +1,11 @@
-export interface IUser {
-  id: number;
-  username: string;
-  email: string;
-  avatar?: string;
-  near_address?: string;
-}
+import { z } from "zod";
 
-export interface IUpdateUser {
-  email: string;
-  username: string;
-}
+export const UserContract = z.object({
+  id: z.number(),
+  username: z.string(),
+  email: z.string(),
+  avatar: z.string().nullish(),
+  near_address: z.string().nullish(),
+});
+
+export type IUser = z.infer<typeof UserContract>;

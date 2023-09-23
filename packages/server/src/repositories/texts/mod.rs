@@ -39,6 +39,21 @@ pub async fn create(dto: TextDto) -> Result<Text> {
     }
 }
 
+pub async fn get_all(limit: i64) -> Result<Vec<Text>> {
+    let mut conn = DB().await.get_conn().await?;
+
+    let result = texts_table
+        .limit(limit)
+        .select(Text::as_select())
+        .load(&mut conn)
+        .await;
+
+    match result {
+        Ok(texts) => Ok(texts),
+        Err(_) => Err(Error::NoTextsFound.into_response()),
+    }
+}
+
 pub async fn get_by_id(id: i64) -> Result<Text> {
     let mut conn = DB().await.get_conn().await?;
 

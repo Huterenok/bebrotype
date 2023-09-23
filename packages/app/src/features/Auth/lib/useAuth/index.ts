@@ -14,5 +14,7 @@ export const useAuth = () => {
     if (!user) {
       router.replace("/");
     }
-  });
+  }, [router, user]);
+
+  return user;
 };

@@ -1,3 +1,3 @@
-export type {IUser} from "./types/index"
-export {$user, whoamiFn} from "./model/index"
-export {Profile} from "./ui"
+export type { IUser } from "./types/index";
+export { UserContract } from "./types/index";
+export { $user, whoamiEv, setUserToken, $userToken } from "./model/index";

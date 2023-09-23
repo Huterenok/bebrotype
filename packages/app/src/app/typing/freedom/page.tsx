@@ -1,9 +1,8 @@
 import { Metadata } from "next";
+import { TypingFreedomPage } from "pages-flat";
 
 export const metadata: Metadata = {
   title: "Freedom Typing",
 };
 
-export default function FreedomTypingPage() {
-  return <div>Freedom</div>;
-}
+export default TypingFreedomPage;

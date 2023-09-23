@@ -1,5 +1,5 @@
 export { Banana } from "./Banana";
-export { Button, ButtonSize, ButtonColor } from "./Button";
+export { Button, ButtonColor } from "./Button";
 export { Card, CardSize } from "./Card";
 export { Input } from "./Input";
 export { Loader } from "./Loader";
@@ -10,4 +10,6 @@ export { SocLink } from "./SocLink";
 export type { ISocLink } from "./SocLink";
 export { Text } from "./Text";
 export { Title } from "./Title";
-export {Skeleton} from "./Skeleton"
+export { Skeleton } from "./Skeleton";
+export { TypingCard } from "./TypingCard";
+export type { ITypingCard } from "./TypingCard";

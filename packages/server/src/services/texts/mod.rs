@@ -1,12 +1,12 @@
 use axum::response::IntoResponse;
 
 use crate::{
-	entities::{Text, User},
-
-	controllers::texts::dto::{CreateTextDto, UpdateTextDto},
-	repositories::texts::{create, delete, get_by_id, get_by_user, get_liked, update, like, dislike},
-
-	common::{Error, Result}
+    common::{Error, Result},
+    controllers::texts::dto::{CreateTextDto, UpdateTextDto},
+    entities::{Text, User},
+    repositories::texts::{
+        create, delete, dislike, get_all, get_by_id, get_by_user, get_liked, like, update,
+    },
 };
 
 use super::users::get_user_by_id;
@@ -15,6 +15,11 @@ pub async fn create_text(user_id: i64, dto: CreateTextDto) -> Result<Text> {
     let text = dto.into_text(user_id);
 
     let res = create(text).await?;
+    Ok(res)
+}
+
+pub async fn get_all_texts(limit: i64) -> Result<Vec<Text>> {
+    let res = get_all(limit).await?;
     Ok(res)
 }
 
@@ -54,10 +59,10 @@ pub async fn toggle_like(id: i64, user: User) -> Result<bool> {
         .find(|text| text.id == id);
 
     if let Some(text) = liked_text {
-				dislike(text).await?;
+        dislike(text).await?;
         Ok(false)
     } else {
-				like(id, user.id).await?;
+        like(id, user.id).await?;
         Ok(true)
     }
 }
