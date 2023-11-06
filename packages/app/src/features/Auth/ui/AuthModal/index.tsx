@@ -1,16 +1,19 @@
 "use client";
 
-import { useUnit } from "effector-react";
+import { useGate, useUnit } from "effector-react";
 import { FC } from "react";
+import { useRouter } from "next/navigation";
 
-import { $isModalOpened, modalToggleEv } from "../../model/modal";
+import { $isModalOpened, modalToggleEv, routerGate } from "../../model";
 import { AuthForm } from "./AuthForm";
 
 import { Modal } from "shared/ui";
 
 export const AuthModal: FC = () => {
-  const isModalOpened = useUnit($isModalOpened);
-  const modalToggle = useUnit(modalToggleEv);
+  const [isModalOpened, modalToggle] = useUnit([$isModalOpened, modalToggleEv]);
+
+  const router = useRouter();
+  useGate(routerGate, router);
 
   const onClose = () => {
     modalToggle();

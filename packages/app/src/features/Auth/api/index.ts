@@ -1,8 +1,19 @@
-import { createEndpointUrl } from "shared/api";
+import { AuthResponse } from "../types";
 
-export const register = createEndpointUrl("auth/register");
+import { createEndpointUrl, request } from "shared/api";
 
-export const login = createEndpointUrl("auth/login");
+export const login = async () => {
+  return await request<AuthResponse>({
+    endpoint: "auth/login",
+    method: "POST",
+  });
+};
+export const register = async () => {
+  return await request<AuthResponse>({
+    endpoint: "auth/register",
+    method: "POST",
+  });
+};
 
 //TODO: todoooooo
 export const googleOAuth = () => {

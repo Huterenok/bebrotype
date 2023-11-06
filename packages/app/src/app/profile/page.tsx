@@ -1,8 +1,6 @@
-"use client";
-
 import { Metadata } from "next";
 
-import { ProfilePage } from "pages-flat";
+import { ProfileMePage } from "pages-flat";
 import { useAuth } from "features/Auth";
 
 export const metadata: Metadata = {
@@ -10,7 +8,8 @@ export const metadata: Metadata = {
   icons: "/icons/banana.svg",
 };
 
-export default function ProfileMePage() {
-  const _ = useAuth();
-  return <ProfilePage id={null}/>;
+export default function Page() {
+  const user = useAuth();
+
+  return <ProfileMePage id={user.id} />;
 }

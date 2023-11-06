@@ -11,6 +11,6 @@ export const typingStyles: ITypingCard[] = [
     icon: "/icons/group.svg",
     title: "User's texts",
     subtitle: "Ready-made texts from people of different stripes",
-    href: "/typing/texts",
+    href: "/texts",
   },
 ];

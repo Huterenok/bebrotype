@@ -7,9 +7,8 @@ use crate::entities::User;
 pub struct UserResponseDto {
     pub id: i64,
     pub username: String,
-    pub email: String,
     pub avatar: Option<String>,
-    pub near_address: Option<String>
+    pub near_address: Option<String>,
 }
 
 impl Into<UserResponseDto> for User {
@@ -17,9 +16,29 @@ impl Into<UserResponseDto> for User {
         UserResponseDto {
             id: self.id,
             username: self.username,
+            avatar: self.avatar,
+            near_address: self.near_address,
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct SessionResponseDto {
+    pub id: i64,
+    pub username: String,
+    pub email: String,
+    pub avatar: Option<String>,
+    pub near_address: Option<String>,
+}
+
+impl Into<SessionResponseDto> for User {
+    fn into(self) -> SessionResponseDto {
+        SessionResponseDto {
+            id: self.id,
+            username: self.username,
             email: self.email,
             avatar: self.avatar,
-            near_address: self.near_address
+            near_address: self.near_address,
         }
     }
 }
@@ -40,7 +59,7 @@ pub struct CreateUserDto {
         message = "Password must consist of 6 to 24 characters"
     ))]
     pub password: String,
-		pub avatar: Option<String>
+    pub avatar: Option<String>,
 }
 
 #[derive(Deserialize)]

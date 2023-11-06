@@ -10,7 +10,7 @@ import styles from "./TextItem.module.scss";
 
 export const TextItem: FC<IText> = ({ id, content, likes, title }) => {
   return (
-    <Link href={`/text/${id}`}>
+    <Link href={`/texts/${id}`}>
       <Card className={styles.wrapper}>
         <p>#{id}</p>
         <h1>{title}</h1>

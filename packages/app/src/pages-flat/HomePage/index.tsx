@@ -8,7 +8,7 @@ import { Title, Text, Button } from "shared/ui";
 
 export const HomePage: FC = () => {
   return (
-    <div className={styles.wrapper}>
+    <section className={styles.wrapper}>
       <Title>Welcome to Bebrotype, bebrochad!</Title>
       <Text>
         Today was a hard day, right? It is difficult for all of us to overcome
@@ -30,6 +30,6 @@ export const HomePage: FC = () => {
       <div className={styles.model_wrapper}>
         <RunningBanana />
       </div>
-    </div>
+    </section>
   );
 };

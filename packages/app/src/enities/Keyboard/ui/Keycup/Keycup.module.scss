@@ -1,0 +1,17 @@
+.wrapper {
+  padding: 20px;
+
+  color: var(--dark-green);
+  background-color: var(--sage);
+
+  border: 1px solid var(--dark-green);
+  border-radius: 4px;
+
+  transition: 0.2s all var(--transition);
+
+  &.isActive {
+    color: var(--sage);
+    background-color: var(--green);
+    border: 1px solid var(--sage);
+  }
+}

@@ -4,11 +4,11 @@ import { useEffect } from "react";
 import { useUnit } from "effector-react";
 import { useRouter } from "next/navigation";
 
-import { $user } from "enities/User/model";
+import { $session } from "enities/Session";
 
 export const useAuth = () => {
   const router = useRouter();
-  const user = useUnit($user);
+  const user = useUnit($session);
 
   useEffect(() => {
     if (!user) {
@@ -16,5 +16,5 @@ export const useAuth = () => {
     }
   }, [router, user]);
 
-  return user;
+  return user!;
 };

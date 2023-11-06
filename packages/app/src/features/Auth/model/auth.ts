@@ -1,47 +1,27 @@
 import { createEvent, sample } from "effector";
-import {
-  createJsonMutation,
-  createQuery,
-  declareParams,
-} from "@farfetched/core";
-import { zodContract } from "@farfetched/zod";
+import { createMutation, createQuery } from "@farfetched/core";
 
 import { modalToggleEv } from "./modal";
 import { login, register, googleOAuth } from "../api";
+import { RegisterBody, LoginBody } from "../types";
+
+import { $session, setUserToken } from "enities/Session";
 import {
-  AuthResponseContract,
-  ILoginRequest,
-  IRegisterRequest,
-} from "../types";
+  createRouterInstace,
+  toastErrorEv,
+  toastSuccessEv,
+} from "shared/config";
 
-import { $user, setUserToken } from "enities/User";
-import { toastErrorEv, toastSuccessEv } from "shared/config";
+export const { navigateFx, routerGate } = createRouterInstace();
 
-export const registerEv = createEvent<IRegisterRequest>();
-const registerFx = createJsonMutation({
-  params: declareParams<IRegisterRequest>(),
-  request: {
-    method: "POST",
-    url: register,
-    body: (params) => {
-      return JSON.stringify(params);
-    },
-  },
-  response: {
-    contract: zodContract(AuthResponseContract),
-  },
+export const registerEv = createEvent<RegisterBody>();
+const registerFx = createMutation({
+  handler: register,
 });
 
-export const loginEv = createEvent<ILoginRequest>();
-const loginFx = createJsonMutation({
-  params: declareParams<ILoginRequest>(),
-  request: {
-    method: "POST",
-    url: login
-  },
-  response: {
-    contract: zodContract(AuthResponseContract),
-  },
+export const loginEv = createEvent<LoginBody>();
+const loginFx = createMutation({
+  handler: login,
 });
 
 export const googleOAuthEv = createEvent();
@@ -66,24 +46,28 @@ sample({
   target: googleOAuthFx.start,
 });
 
-$user.on(registerFx.finished.success, (_, { result }) => {
+$session.on(registerFx.finished.success, (_, { result }) => {
   toastSuccessEv("Successfully registered!");
   setUserToken(result.token);
   modalToggleEv();
+  navigateFx({ path: "/profile" });
   return result.user;
 });
-$user.on(registerFx.finished.failure, (_, { error }) => {
+$session.on(registerFx.finished.failure, (_, { error }) => {
   //@ts-ignore - TODO
   toastErrorEv(error.message);
 });
 
-$user.on(loginFx.finished.success, (_, { result }) => {
+$session.on(loginFx.finished.success, (_, { result }) => {
+  console.log("login success");
+
   toastSuccessEv("Successfully logged in!");
   setUserToken(result.token);
   modalToggleEv();
+  navigateFx({ path: "/profile" });
   return result.user;
 });
-$user.on(loginFx.finished.failure, (_, { error }) => {
+$session.on(loginFx.finished.failure, (_, { error }) => {
   //@ts-ignore - TODO
   toastErrorEv(error.message);
 });

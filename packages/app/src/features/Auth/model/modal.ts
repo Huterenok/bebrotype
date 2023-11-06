@@ -1,9 +1,4 @@
-import { createEvent, createStore } from "effector";
+import { invoke } from "@withease/factories";
+import { createModal } from "shared/config";
 
-export const $isModalOpened = createStore<boolean>(false);
-
-export const modalToggleEv = createEvent();
-
-$isModalOpened.on(modalToggleEv, (isOpened) => {
-  return !isOpened;
-});
+export const { $isModalOpened, modalToggleEv } = invoke(createModal);

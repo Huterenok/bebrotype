@@ -10,7 +10,7 @@ use crate::{
     services::users::{get_all_users, get_user_by_id, update_user},
 };
 
-use self::dto::{AllUsersQuery, UserResponseDto};
+use self::dto::{AllUsersQuery, SessionResponseDto, UserResponseDto};
 
 pub fn create_public_user_routes() -> Router {
     let router = Router::new()
@@ -26,7 +26,7 @@ pub fn create_private_user_routes() -> Router {
     Router::new().nest("/user", router)
 }
 
-pub async fn whoami(Extension(user): Extension<User>) -> Result<Json<UserResponseDto>> {
+pub async fn whoami(Extension(user): Extension<User>) -> Result<Json<SessionResponseDto>> {
     Ok(Json(user.into()))
 }
 

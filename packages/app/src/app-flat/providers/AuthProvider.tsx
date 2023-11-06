@@ -4,7 +4,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { ReactNode, useLayoutEffect } from "react";
 import { useUnit } from "effector-react";
 
-import { whoamiEv, setUserToken } from "enities/User";
+import { whoamiEv, setUserToken } from "enities/Session";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const whoami = useUnit(whoamiEv);

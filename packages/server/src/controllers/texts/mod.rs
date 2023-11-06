@@ -3,6 +3,7 @@ pub mod dto;
 use axum::extract::{Path, Query};
 use axum::routing::{delete, get, patch, post};
 use axum::{Extension, Json, Router};
+use serde::Deserialize;
 
 use crate::{
     common::{Result, ValidatedJson},
@@ -10,8 +11,8 @@ use crate::{
 };
 
 use crate::services::texts::{
-    create_text, delete_text, get_all_texts, get_liked_texts, get_text_by_id, get_texts_by_user_id,
-    toggle_like, update_text,
+    create_text, delete_text, get_all_texts, get_liked_texts, get_random_text, get_text_by_id,
+    get_texts_by_user_id, toggle_like, update_text,
 };
 
 use self::dto::{CreateTextDto, UpdateTextDto};
@@ -19,6 +20,7 @@ use self::dto::{CreateTextDto, UpdateTextDto};
 pub fn create_public_text_routes() -> Router {
     let router = Router::new()
         .route("/", get(get_all_texts_route))
+        .route("/random", get(get_random_text_route))
         .route("/user/:id", get(get_texts_by_user_id_route))
         .route("/:id", get(get_text_by_id_route));
     Router::new().nest("/text", router)
@@ -34,7 +36,13 @@ pub fn create_private_text_routes() -> Router {
     Router::new().nest("/text", router)
 }
 
-async fn get_all_texts_route(Query(limit): Query<i64>) -> Result<Json<Vec<Text>>> {
+#[derive(Deserialize)]
+struct GetAllQuery {
+    limit: Option<i64>,
+}
+
+async fn get_all_texts_route(Query(query): Query<GetAllQuery>) -> Result<Json<Vec<Text>>> {
+    let limit = query.limit.unwrap_or(10);
     let texts = get_all_texts(limit).await?;
     Ok(Json(texts))
 }
@@ -47,6 +55,11 @@ async fn get_text_by_id_route(Path(id): Path<i64>) -> Result<Json<Text>> {
 async fn get_texts_by_user_id_route(Path(id): Path<i64>) -> Result<Json<Vec<Text>>> {
     let texts = get_texts_by_user_id(id).await?;
     Ok(Json(texts))
+}
+
+async fn get_random_text_route() -> Result<Json<Text>> {
+    let text = get_random_text().await?;
+    Ok(Json(text))
 }
 
 async fn create_text_route(

@@ -1,6 +1,6 @@
 export { Banana } from "./Banana";
 export { Button, ButtonColor } from "./Button";
-export { Card, CardSize } from "./Card";
+export { Card } from "./Card";
 export { Input } from "./Input";
 export { Loader } from "./Loader";
 export { Modal } from "./Modal";

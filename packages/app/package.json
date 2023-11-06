@@ -20,6 +20,7 @@
     "effector-forms": "^1.3.4",
     "effector-localstorage": "^1.0.0",
     "effector-react": "^22.5.3",
+    "ky": "^1.0.1",
     "next": "13.4.10",
     "react": "18.2.0",
     "react-dom": "18.2.0",

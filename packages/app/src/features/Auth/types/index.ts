@@ -1,19 +1,17 @@
-import { IUser } from "enities/User";
-import { UserContract } from "enities/User";
-import { z } from "zod";
+import { ISession } from "enities/Session";
 
-export interface IRegisterRequest {
+export interface RegisterBody {
   username: string;
   email: string;
   password: string;
 }
 
-export interface ILoginRequest {
+export interface LoginBody {
   email: string;
   password: string;
 }
 
-export const AuthResponseContract = z.object({
-  token: z.string(),
-  user: UserContract,
-});
+export interface AuthResponse {
+  token: string;
+  user: ISession;
+}

@@ -24,16 +24,16 @@ where
             .map_err(|_| Error::InvalidBody("Invalid data".to_string()).into_response())?;
 
         if let Err(e) = data.validate() {
-						tracing::error!("{:?}", e);
+            tracing::error!("{:?}", e);
             let msg: String = e
                 .field_errors()
                 .iter()
                 .flat_map(|err_map| err_map.1.iter())
                 .filter_map(|err| err.message.clone())
                 .map(|msg_cow| {
-									tracing::error!("{}", msg_cow.to_string());
-									msg_cow.to_string()
-								})
+                    tracing::error!("{}", msg_cow.to_string());
+                    msg_cow.to_string()
+                })
                 .collect::<Vec<String>>()
                 .join("\n");
 

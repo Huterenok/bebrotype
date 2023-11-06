@@ -79,10 +79,10 @@ pub async fn get_by_user(user: User) -> Result<Vec<Text>> {
 
     match data {
         Ok(texts) => match texts.len() {
-            0 => Err(Error::TextByUserIdNotFound(user.id).into_response()),
+            0 => Err(Error::TextsByUserIdNotFound(user.id).into_response()),
             _ => Ok(texts),
         },
-        Err(_) => Err(Error::TextByUserIdNotFound(user.id).into_response()),
+        Err(_) => Err(Error::TextsByUserIdNotFound(user.id).into_response()),
     }
 }
 

@@ -1,19 +1,15 @@
 "use client";
 
-import { FC } from "react";
+import { FC, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 interface PortalProps {
   children: React.ReactNode;
-  element?: HTMLElement;
 }
 
 // TODO: document.body must be only on client
-export const Portal: FC<PortalProps> = ({
-  children,
-  element = document.body,
-}) => {
-  return createPortal(children, element);
+export const Portal: FC<PortalProps> = ({ children }) => {
+  return createPortal(children, document.body);
 };
 
 // export const Portal: FC<PortalProps> = ({ children }) => {
@@ -26,4 +22,16 @@ export const Portal: FC<PortalProps> = ({
 //   }, []);
 
 //   return mounted ? createPortal(children, document.body) : null;
+// };
+
+// export const Portal: FC<PortalProps> = ({ children }) => {
+//   const ref = useRef<Element | null>(null);
+//   const [mounted, setMounted] = useState(false);
+
+//   useEffect(() => {
+//     ref.current = document.body;
+//     setMounted(true);
+//   }, []);
+
+//   return mounted && ref.current ? createPortal(children, ref.current) : null;
 // };

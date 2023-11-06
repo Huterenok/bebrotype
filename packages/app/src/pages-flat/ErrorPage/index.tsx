@@ -17,10 +17,10 @@ export const ErrorPage: FC<ErrorPageProps> = ({ error, reset }) => {
   }, [error]);
 
   return (
-    <div className={styles.wrapper}>
+    <section className={styles.wrapper}>
       <Image width={64} height={64} alt="Sad :(" src="/icons/sad-icon.svg" />
       <h2>Something went wrong!</h2>
       <Button onClick={reset}>Try again</Button>
-    </div>
+    </section>
   );
 };

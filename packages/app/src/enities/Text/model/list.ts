@@ -1,30 +1,30 @@
-import { createEvent, createStore, sample } from "effector";
+// import { createEvent, createStore, sample } from "effector";
 
-import { IText } from "../types";
-import { createFactory } from "@withease/factories";
+// import { IText } from "../types";
+// import { createFactory } from "@withease/factories";
 
-interface createTextListParams {
-  initialValue?: IText[];
-}
+// interface createTextListParams {
+//   initialValue?: IText[];
+// }
 
-//TODO
-export const createTextList = createFactory(
-  ({ initialValue = [] }: createTextListParams) => {
-    const setAll = createEvent<IText[]>();
-    const reset = createEvent();
+// //TODO
+// export const createTextList = createFactory(
+//   ({ initialValue = [] }: createTextListParams) => {
+//     const setAll = createEvent<IText[]>();
+//     const reset = createEvent();
 
-    const $texts = createStore<IText[]>(initialValue);
-    $texts.reset(reset);
+//     const $texts = createStore<IText[]>(initialValue);
+//     $texts.reset(reset);
 
-    sample({
-      clock: setAll,
-      target: $texts,
-    });
+//     sample({
+//       clock: setAll,
+//       target: $texts,
+//     });
 
-    return {
-      $texts,
-      setAll,
-      reset,
-    };
-  }
-);
+//     return {
+//       $texts,
+//       setAll,
+//       reset,
+//     };
+//   }
+// );

@@ -16,13 +16,13 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Providers>
-          <Suspense fallback={<Loader />}>
+          {/* <Suspense fallback={<Loader />}> */}
             <div className="global_layout">
               <Navbar />
               <Header />
               <section className="pages_wrapper">{children}</section>
             </div>
-          </Suspense>
+          {/* </Suspense> */}
         </Providers>
       </body>
     </html>

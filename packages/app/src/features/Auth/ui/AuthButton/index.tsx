@@ -7,11 +7,13 @@ import { FC } from "react";
 
 import { modalToggleEv } from "../../model";
 
-import { $user } from "enities/User";
+import { $session } from "enities/Session";
+
 import { Button, ButtonColor } from "shared/ui";
 
 export const AuthButton: FC = () => {
-  const user = useUnit($user);
+  //TODO: is it good idean to use $sessionToken?
+  const user = useUnit($session);
   const modalToggle = useUnit(modalToggleEv);
 
   const onAuthClick = () => {

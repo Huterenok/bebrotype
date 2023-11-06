@@ -1,16 +1,6 @@
-"use client";
+import { FC } from "react";
 
-import { FC, useEffect } from "react";
-import { useUnit } from "effector-react";
-
-import {
-  $error,
-  $isPending,
-  $userTexts,
-  getUserTextsEv,
-} from "../../UserTexts/model";
-
-import { TextList } from "enities/Text";
+import { TextList, getTextsByUserId } from "enities/Text";
 
 import styles from "./UserTexts.module.scss";
 
@@ -18,29 +8,16 @@ interface ProfileInfoProps {
   id: number;
 }
 
-export const UserTexts: FC<ProfileInfoProps> = ({ id }) => {
-  const [texts, error, isPending, getUserTexts] = useUnit([
-    $userTexts,
-    $error,
-    $isPending,
-    getUserTextsEv,
-  ]);
+export const UserTexts: FC<ProfileInfoProps> = async ({ id }) => {
+  try {
+    const res = await getTextsByUserId(id);
 
-  useEffect(() => {
-    getUserTexts(id);
-  }, [id]);
-
-  //TODO
-  if (error) {
-    return <div>Something went wrong</div>;
+    return (
+      <div className={styles.wrapper}>
+        {res ? <TextList texts={res} /> : <div>Loading...</div>}
+      </div>
+    );
+  } catch (error) {
+    return <div>{error.message}</div>;
   }
-
-  //TODO
-  return isPending ? (
-    <div>Loading...</div>
-  ) : (
-    <div className={styles.wrapper}>
-      <TextList texts={texts} />
-    </div>
-  );
 };
