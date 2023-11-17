@@ -31,7 +31,10 @@ pub async fn create(dto: CreateUserDto) -> Result<User> {
 
     match result {
         Ok(user) => Ok(user),
-        Err(_) => Err(Error::UserAlreadyExist.into_response()),
+        Err(err) => {
+            println!("------------------- {:?} --------", err);
+            Err(Error::UserAlreadyExist.into_response())
+        }
     }
 }
 

@@ -18,6 +18,8 @@ export const UserTexts: FC<ProfileInfoProps> = async ({ id }) => {
       </div>
     );
   } catch (error) {
+    //TODO
+    //@ts-ignore
     return <div>{error.message}</div>;
   }
 };

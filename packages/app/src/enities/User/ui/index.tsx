@@ -37,6 +37,8 @@ export const Profile: FC<ProfileProps> = async ({ id }) => {
       <div>Loading...</div>
     );
   } catch (error) {
+    //TODO
+    //@ts-ignore
     return <div>{error.message}</div>;
   }
 };
